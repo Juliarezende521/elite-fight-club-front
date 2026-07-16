@@ -15,6 +15,7 @@ import { Route as AlunoRouteImport } from './routes/aluno'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfessorDashboardRouteImport } from './routes/professor.dashboard'
+import { Route as ProfessorAgendaRouteImport } from './routes/professor.agenda'
 import { Route as AlunoNotificacoesRouteImport } from './routes/aluno.notificacoes'
 import { Route as AlunoGraduacaoRouteImport } from './routes/aluno.graduacao'
 import { Route as AlunoFrequenciaRouteImport } from './routes/aluno.frequencia'
@@ -52,6 +53,11 @@ const IndexRoute = IndexRouteImport.update({
 const ProfessorDashboardRoute = ProfessorDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorAgendaRoute = ProfessorAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
   getParentRoute: () => ProfessorRoute,
 } as any)
 const AlunoNotificacoesRoute = AlunoNotificacoesRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/aluno/frequencia': typeof AlunoFrequenciaRoute
   '/aluno/graduacao': typeof AlunoGraduacaoRoute
   '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
   '/professor/dashboard': typeof ProfessorDashboardRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/aluno/frequencia': typeof AlunoFrequenciaRoute
   '/aluno/graduacao': typeof AlunoGraduacaoRoute
   '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
   '/professor/dashboard': typeof ProfessorDashboardRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/aluno/frequencia': typeof AlunoFrequenciaRoute
   '/aluno/graduacao': typeof AlunoGraduacaoRoute
   '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
   '/professor/dashboard': typeof ProfessorDashboardRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/aluno/frequencia'
     | '/aluno/graduacao'
     | '/aluno/notificacoes'
+    | '/professor/agenda'
     | '/professor/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/aluno/frequencia'
     | '/aluno/graduacao'
     | '/aluno/notificacoes'
+    | '/professor/agenda'
     | '/professor/dashboard'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/aluno/frequencia'
     | '/aluno/graduacao'
     | '/aluno/notificacoes'
+    | '/professor/agenda'
     | '/professor/dashboard'
   fileRoutesById: FileRoutesById
 }
@@ -245,6 +257,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/professor/dashboard'
       preLoaderRoute: typeof ProfessorDashboardRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/agenda': {
+      id: '/professor/agenda'
+      path: '/agenda'
+      fullPath: '/professor/agenda'
+      preLoaderRoute: typeof ProfessorAgendaRouteImport
       parentRoute: typeof ProfessorRoute
     }
     '/aluno/notificacoes': {
@@ -339,10 +358,12 @@ const AlunoRouteChildren: AlunoRouteChildren = {
 const AlunoRouteWithChildren = AlunoRoute._addFileChildren(AlunoRouteChildren)
 
 interface ProfessorRouteChildren {
+  ProfessorAgendaRoute: typeof ProfessorAgendaRoute
   ProfessorDashboardRoute: typeof ProfessorDashboardRoute
 }
 
 const ProfessorRouteChildren: ProfessorRouteChildren = {
+  ProfessorAgendaRoute: ProfessorAgendaRoute,
   ProfessorDashboardRoute: ProfessorDashboardRoute,
 }
 
