@@ -14,7 +14,14 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AlunoRouteImport } from './routes/aluno'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlunoNotificacoesRouteImport } from './routes/aluno.notificacoes'
+import { Route as AlunoGraduacaoRouteImport } from './routes/aluno.graduacao'
+import { Route as AlunoFrequenciaRouteImport } from './routes/aluno.frequencia'
+import { Route as AlunoFinanceiroRouteImport } from './routes/aluno.financeiro'
+import { Route as AlunoEvolucaoRouteImport } from './routes/aluno.evolucao'
 import { Route as AlunoDashboardRouteImport } from './routes/aluno.dashboard'
+import { Route as AlunoAulasRouteImport } from './routes/aluno.aulas'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const ProfessorRoute = ProfessorRouteImport.update({
   id: '/professor',
@@ -41,36 +48,92 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlunoNotificacoesRoute = AlunoNotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoGraduacaoRoute = AlunoGraduacaoRouteImport.update({
+  id: '/graduacao',
+  path: '/graduacao',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoFrequenciaRoute = AlunoFrequenciaRouteImport.update({
+  id: '/frequencia',
+  path: '/frequencia',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoFinanceiroRoute = AlunoFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoEvolucaoRoute = AlunoEvolucaoRouteImport.update({
+  id: '/evolucao',
+  path: '/evolucao',
+  getParentRoute: () => AlunoRoute,
+} as any)
 const AlunoDashboardRoute = AlunoDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AlunoRoute,
 } as any)
+const AlunoAulasRoute = AlunoAulasRouteImport.update({
+  id: '/aulas',
+  path: '/aulas',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
   '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
   '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
   '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -80,9 +143,29 @@ export interface FileRouteTypes {
     | '/aluno'
     | '/login'
     | '/professor'
+    | '/admin/dashboard'
+    | '/aluno/aulas'
     | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/aluno' | '/login' | '/professor' | '/aluno/dashboard'
+  to:
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/admin/dashboard'
+    | '/aluno/aulas'
+    | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
   id:
     | '__root__'
     | '/'
@@ -90,12 +173,19 @@ export interface FileRouteTypes {
     | '/aluno'
     | '/login'
     | '/professor'
+    | '/admin/dashboard'
+    | '/aluno/aulas'
     | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AlunoRoute: typeof AlunoRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfessorRoute: typeof ProfessorRoute
@@ -138,6 +228,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aluno/notificacoes': {
+      id: '/aluno/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/aluno/notificacoes'
+      preLoaderRoute: typeof AlunoNotificacoesRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/graduacao': {
+      id: '/aluno/graduacao'
+      path: '/graduacao'
+      fullPath: '/aluno/graduacao'
+      preLoaderRoute: typeof AlunoGraduacaoRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/frequencia': {
+      id: '/aluno/frequencia'
+      path: '/frequencia'
+      fullPath: '/aluno/frequencia'
+      preLoaderRoute: typeof AlunoFrequenciaRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/financeiro': {
+      id: '/aluno/financeiro'
+      path: '/financeiro'
+      fullPath: '/aluno/financeiro'
+      preLoaderRoute: typeof AlunoFinanceiroRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/evolucao': {
+      id: '/aluno/evolucao'
+      path: '/evolucao'
+      fullPath: '/aluno/evolucao'
+      preLoaderRoute: typeof AlunoEvolucaoRouteImport
+      parentRoute: typeof AlunoRoute
+    }
     '/aluno/dashboard': {
       id: '/aluno/dashboard'
       path: '/dashboard'
@@ -145,22 +270,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlunoDashboardRouteImport
       parentRoute: typeof AlunoRoute
     }
+    '/aluno/aulas': {
+      id: '/aluno/aulas'
+      path: '/aulas'
+      fullPath: '/aluno/aulas'
+      preLoaderRoute: typeof AlunoAulasRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminDashboardRoute: typeof AdminDashboardRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDashboardRoute: AdminDashboardRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface AlunoRouteChildren {
+  AlunoAulasRoute: typeof AlunoAulasRoute
   AlunoDashboardRoute: typeof AlunoDashboardRoute
+  AlunoEvolucaoRoute: typeof AlunoEvolucaoRoute
+  AlunoFinanceiroRoute: typeof AlunoFinanceiroRoute
+  AlunoFrequenciaRoute: typeof AlunoFrequenciaRoute
+  AlunoGraduacaoRoute: typeof AlunoGraduacaoRoute
+  AlunoNotificacoesRoute: typeof AlunoNotificacoesRoute
 }
 
 const AlunoRouteChildren: AlunoRouteChildren = {
+  AlunoAulasRoute: AlunoAulasRoute,
   AlunoDashboardRoute: AlunoDashboardRoute,
+  AlunoEvolucaoRoute: AlunoEvolucaoRoute,
+  AlunoFinanceiroRoute: AlunoFinanceiroRoute,
+  AlunoFrequenciaRoute: AlunoFrequenciaRoute,
+  AlunoGraduacaoRoute: AlunoGraduacaoRoute,
+  AlunoNotificacoesRoute: AlunoNotificacoesRoute,
 }
 
 const AlunoRouteWithChildren = AlunoRoute._addFileChildren(AlunoRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AlunoRoute: AlunoRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfessorRoute: ProfessorRoute,
