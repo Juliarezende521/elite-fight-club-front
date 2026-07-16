@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AlunoRouteImport } from './routes/aluno'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AlunoDashboardRouteImport } from './routes/aluno.dashboard'
 
 const ProfessorRoute = ProfessorRouteImport.update({
   id: '/professor',
@@ -40,41 +41,62 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlunoDashboardRoute = AlunoDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AlunoRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/aluno': typeof AlunoRoute
+  '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/aluno': typeof AlunoRoute
+  '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/aluno': typeof AlunoRoute
+  '/aluno': typeof AlunoRouteWithChildren
   '/login': typeof LoginRoute
   '/professor': typeof ProfessorRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/aluno' | '/login' | '/professor'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/aluno/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/aluno' | '/login' | '/professor'
-  id: '__root__' | '/' | '/admin' | '/aluno' | '/login' | '/professor'
+  to: '/' | '/admin' | '/aluno' | '/login' | '/professor' | '/aluno/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/aluno/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
-  AlunoRoute: typeof AlunoRoute
+  AlunoRoute: typeof AlunoRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProfessorRoute: typeof ProfessorRoute
 }
@@ -116,13 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aluno/dashboard': {
+      id: '/aluno/dashboard'
+      path: '/dashboard'
+      fullPath: '/aluno/dashboard'
+      preLoaderRoute: typeof AlunoDashboardRouteImport
+      parentRoute: typeof AlunoRoute
+    }
   }
 }
+
+interface AlunoRouteChildren {
+  AlunoDashboardRoute: typeof AlunoDashboardRoute
+}
+
+const AlunoRouteChildren: AlunoRouteChildren = {
+  AlunoDashboardRoute: AlunoDashboardRoute,
+}
+
+const AlunoRouteWithChildren = AlunoRoute._addFileChildren(AlunoRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
-  AlunoRoute: AlunoRoute,
+  AlunoRoute: AlunoRouteWithChildren,
   LoginRoute: LoginRoute,
   ProfessorRoute: ProfessorRoute,
 }
