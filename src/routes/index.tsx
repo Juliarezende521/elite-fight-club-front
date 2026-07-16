@@ -2,6 +2,7 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { getSession, homePathFor } from "@/lib/auth";
 
 export const Route = createFileRoute("/")({
+  ssr: false,
   component: IndexRedirect,
 });
 
