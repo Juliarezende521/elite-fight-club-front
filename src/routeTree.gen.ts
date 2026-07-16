@@ -9,38 +9,398 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfessorRouteImport } from './routes/professor'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AlunoRouteImport } from './routes/aluno'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProfessorTurmasRouteImport } from './routes/professor.turmas'
+import { Route as ProfessorPersonaisRouteImport } from './routes/professor.personais'
+import { Route as ProfessorNotificacoesRouteImport } from './routes/professor.notificacoes'
+import { Route as ProfessorGraduacoesRouteImport } from './routes/professor.graduacoes'
+import { Route as ProfessorDashboardRouteImport } from './routes/professor.dashboard'
+import { Route as ProfessorCheckinRouteImport } from './routes/professor.checkin'
+import { Route as ProfessorAlunosRouteImport } from './routes/professor.alunos'
+import { Route as ProfessorAgendaRouteImport } from './routes/professor.agenda'
+import { Route as AlunoNotificacoesRouteImport } from './routes/aluno.notificacoes'
+import { Route as AlunoGraduacaoRouteImport } from './routes/aluno.graduacao'
+import { Route as AlunoFrequenciaRouteImport } from './routes/aluno.frequencia'
+import { Route as AlunoFinanceiroRouteImport } from './routes/aluno.financeiro'
+import { Route as AlunoEvolucaoRouteImport } from './routes/aluno.evolucao'
+import { Route as AlunoDashboardRouteImport } from './routes/aluno.dashboard'
+import { Route as AlunoAulasRouteImport } from './routes/aluno.aulas'
+import { Route as AdminRelatoriosRouteImport } from './routes/admin.relatorios'
+import { Route as AdminProfessoresRouteImport } from './routes/admin.professores'
+import { Route as AdminModalidadesRouteImport } from './routes/admin.modalidades'
+import { Route as AdminFinanceiroRouteImport } from './routes/admin.financeiro'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
+import { Route as AdminAuditoriaRouteImport } from './routes/admin.auditoria'
+import { Route as AdminAlunosRouteImport } from './routes/admin.alunos'
 
+const ProfessorRoute = ProfessorRouteImport.update({
+  id: '/professor',
+  path: '/professor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlunoRoute = AlunoRouteImport.update({
+  id: '/aluno',
+  path: '/aluno',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfessorTurmasRoute = ProfessorTurmasRouteImport.update({
+  id: '/turmas',
+  path: '/turmas',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorPersonaisRoute = ProfessorPersonaisRouteImport.update({
+  id: '/personais',
+  path: '/personais',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorNotificacoesRoute = ProfessorNotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorGraduacoesRoute = ProfessorGraduacoesRouteImport.update({
+  id: '/graduacoes',
+  path: '/graduacoes',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorDashboardRoute = ProfessorDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorCheckinRoute = ProfessorCheckinRouteImport.update({
+  id: '/checkin',
+  path: '/checkin',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorAlunosRoute = ProfessorAlunosRouteImport.update({
+  id: '/alunos',
+  path: '/alunos',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const ProfessorAgendaRoute = ProfessorAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => ProfessorRoute,
+} as any)
+const AlunoNotificacoesRoute = AlunoNotificacoesRouteImport.update({
+  id: '/notificacoes',
+  path: '/notificacoes',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoGraduacaoRoute = AlunoGraduacaoRouteImport.update({
+  id: '/graduacao',
+  path: '/graduacao',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoFrequenciaRoute = AlunoFrequenciaRouteImport.update({
+  id: '/frequencia',
+  path: '/frequencia',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoFinanceiroRoute = AlunoFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoEvolucaoRoute = AlunoEvolucaoRouteImport.update({
+  id: '/evolucao',
+  path: '/evolucao',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoDashboardRoute = AlunoDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AlunoAulasRoute = AlunoAulasRouteImport.update({
+  id: '/aulas',
+  path: '/aulas',
+  getParentRoute: () => AlunoRoute,
+} as any)
+const AdminRelatoriosRoute = AdminRelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProfessoresRoute = AdminProfessoresRouteImport.update({
+  id: '/professores',
+  path: '/professores',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminModalidadesRoute = AdminModalidadesRouteImport.update({
+  id: '/modalidades',
+  path: '/modalidades',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFinanceiroRoute = AdminFinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminConfiguracoesRoute = AdminConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAlunosRoute = AdminAlunosRouteImport.update({
+  id: '/alunos',
+  path: '/alunos',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/aluno': typeof AlunoRouteWithChildren
+  '/login': typeof LoginRoute
+  '/professor': typeof ProfessorRouteWithChildren
+  '/admin/alunos': typeof AdminAlunosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/modalidades': typeof AdminModalidadesRoute
+  '/admin/professores': typeof AdminProfessoresRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
+  '/professor/alunos': typeof ProfessorAlunosRoute
+  '/professor/checkin': typeof ProfessorCheckinRoute
+  '/professor/dashboard': typeof ProfessorDashboardRoute
+  '/professor/graduacoes': typeof ProfessorGraduacoesRoute
+  '/professor/notificacoes': typeof ProfessorNotificacoesRoute
+  '/professor/personais': typeof ProfessorPersonaisRoute
+  '/professor/turmas': typeof ProfessorTurmasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/aluno': typeof AlunoRouteWithChildren
+  '/login': typeof LoginRoute
+  '/professor': typeof ProfessorRouteWithChildren
+  '/admin/alunos': typeof AdminAlunosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/modalidades': typeof AdminModalidadesRoute
+  '/admin/professores': typeof AdminProfessoresRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
+  '/professor/alunos': typeof ProfessorAlunosRoute
+  '/professor/checkin': typeof ProfessorCheckinRoute
+  '/professor/dashboard': typeof ProfessorDashboardRoute
+  '/professor/graduacoes': typeof ProfessorGraduacoesRoute
+  '/professor/notificacoes': typeof ProfessorNotificacoesRoute
+  '/professor/personais': typeof ProfessorPersonaisRoute
+  '/professor/turmas': typeof ProfessorTurmasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/aluno': typeof AlunoRouteWithChildren
+  '/login': typeof LoginRoute
+  '/professor': typeof ProfessorRouteWithChildren
+  '/admin/alunos': typeof AdminAlunosRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/configuracoes': typeof AdminConfiguracoesRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/financeiro': typeof AdminFinanceiroRoute
+  '/admin/modalidades': typeof AdminModalidadesRoute
+  '/admin/professores': typeof AdminProfessoresRoute
+  '/admin/relatorios': typeof AdminRelatoriosRoute
+  '/aluno/aulas': typeof AlunoAulasRoute
+  '/aluno/dashboard': typeof AlunoDashboardRoute
+  '/aluno/evolucao': typeof AlunoEvolucaoRoute
+  '/aluno/financeiro': typeof AlunoFinanceiroRoute
+  '/aluno/frequencia': typeof AlunoFrequenciaRoute
+  '/aluno/graduacao': typeof AlunoGraduacaoRoute
+  '/aluno/notificacoes': typeof AlunoNotificacoesRoute
+  '/professor/agenda': typeof ProfessorAgendaRoute
+  '/professor/alunos': typeof ProfessorAlunosRoute
+  '/professor/checkin': typeof ProfessorCheckinRoute
+  '/professor/dashboard': typeof ProfessorDashboardRoute
+  '/professor/graduacoes': typeof ProfessorGraduacoesRoute
+  '/professor/notificacoes': typeof ProfessorNotificacoesRoute
+  '/professor/personais': typeof ProfessorPersonaisRoute
+  '/professor/turmas': typeof ProfessorTurmasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/admin/alunos'
+    | '/admin/auditoria'
+    | '/admin/configuracoes'
+    | '/admin/dashboard'
+    | '/admin/financeiro'
+    | '/admin/modalidades'
+    | '/admin/professores'
+    | '/admin/relatorios'
+    | '/aluno/aulas'
+    | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
+    | '/professor/agenda'
+    | '/professor/alunos'
+    | '/professor/checkin'
+    | '/professor/dashboard'
+    | '/professor/graduacoes'
+    | '/professor/notificacoes'
+    | '/professor/personais'
+    | '/professor/turmas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/admin/alunos'
+    | '/admin/auditoria'
+    | '/admin/configuracoes'
+    | '/admin/dashboard'
+    | '/admin/financeiro'
+    | '/admin/modalidades'
+    | '/admin/professores'
+    | '/admin/relatorios'
+    | '/aluno/aulas'
+    | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
+    | '/professor/agenda'
+    | '/professor/alunos'
+    | '/professor/checkin'
+    | '/professor/dashboard'
+    | '/professor/graduacoes'
+    | '/professor/notificacoes'
+    | '/professor/personais'
+    | '/professor/turmas'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/aluno'
+    | '/login'
+    | '/professor'
+    | '/admin/alunos'
+    | '/admin/auditoria'
+    | '/admin/configuracoes'
+    | '/admin/dashboard'
+    | '/admin/financeiro'
+    | '/admin/modalidades'
+    | '/admin/professores'
+    | '/admin/relatorios'
+    | '/aluno/aulas'
+    | '/aluno/dashboard'
+    | '/aluno/evolucao'
+    | '/aluno/financeiro'
+    | '/aluno/frequencia'
+    | '/aluno/graduacao'
+    | '/aluno/notificacoes'
+    | '/professor/agenda'
+    | '/professor/alunos'
+    | '/professor/checkin'
+    | '/professor/dashboard'
+    | '/professor/graduacoes'
+    | '/professor/notificacoes'
+    | '/professor/personais'
+    | '/professor/turmas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  AlunoRoute: typeof AlunoRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ProfessorRoute: typeof ProfessorRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/professor': {
+      id: '/professor'
+      path: '/professor'
+      fullPath: '/professor'
+      preLoaderRoute: typeof ProfessorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aluno': {
+      id: '/aluno'
+      path: '/aluno'
+      fullPath: '/aluno'
+      preLoaderRoute: typeof AlunoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +408,249 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/professor/turmas': {
+      id: '/professor/turmas'
+      path: '/turmas'
+      fullPath: '/professor/turmas'
+      preLoaderRoute: typeof ProfessorTurmasRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/personais': {
+      id: '/professor/personais'
+      path: '/personais'
+      fullPath: '/professor/personais'
+      preLoaderRoute: typeof ProfessorPersonaisRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/notificacoes': {
+      id: '/professor/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/professor/notificacoes'
+      preLoaderRoute: typeof ProfessorNotificacoesRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/graduacoes': {
+      id: '/professor/graduacoes'
+      path: '/graduacoes'
+      fullPath: '/professor/graduacoes'
+      preLoaderRoute: typeof ProfessorGraduacoesRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/dashboard': {
+      id: '/professor/dashboard'
+      path: '/dashboard'
+      fullPath: '/professor/dashboard'
+      preLoaderRoute: typeof ProfessorDashboardRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/checkin': {
+      id: '/professor/checkin'
+      path: '/checkin'
+      fullPath: '/professor/checkin'
+      preLoaderRoute: typeof ProfessorCheckinRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/alunos': {
+      id: '/professor/alunos'
+      path: '/alunos'
+      fullPath: '/professor/alunos'
+      preLoaderRoute: typeof ProfessorAlunosRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/professor/agenda': {
+      id: '/professor/agenda'
+      path: '/agenda'
+      fullPath: '/professor/agenda'
+      preLoaderRoute: typeof ProfessorAgendaRouteImport
+      parentRoute: typeof ProfessorRoute
+    }
+    '/aluno/notificacoes': {
+      id: '/aluno/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/aluno/notificacoes'
+      preLoaderRoute: typeof AlunoNotificacoesRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/graduacao': {
+      id: '/aluno/graduacao'
+      path: '/graduacao'
+      fullPath: '/aluno/graduacao'
+      preLoaderRoute: typeof AlunoGraduacaoRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/frequencia': {
+      id: '/aluno/frequencia'
+      path: '/frequencia'
+      fullPath: '/aluno/frequencia'
+      preLoaderRoute: typeof AlunoFrequenciaRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/financeiro': {
+      id: '/aluno/financeiro'
+      path: '/financeiro'
+      fullPath: '/aluno/financeiro'
+      preLoaderRoute: typeof AlunoFinanceiroRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/evolucao': {
+      id: '/aluno/evolucao'
+      path: '/evolucao'
+      fullPath: '/aluno/evolucao'
+      preLoaderRoute: typeof AlunoEvolucaoRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/dashboard': {
+      id: '/aluno/dashboard'
+      path: '/dashboard'
+      fullPath: '/aluno/dashboard'
+      preLoaderRoute: typeof AlunoDashboardRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/aluno/aulas': {
+      id: '/aluno/aulas'
+      path: '/aulas'
+      fullPath: '/aluno/aulas'
+      preLoaderRoute: typeof AlunoAulasRouteImport
+      parentRoute: typeof AlunoRoute
+    }
+    '/admin/relatorios': {
+      id: '/admin/relatorios'
+      path: '/relatorios'
+      fullPath: '/admin/relatorios'
+      preLoaderRoute: typeof AdminRelatoriosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/professores': {
+      id: '/admin/professores'
+      path: '/professores'
+      fullPath: '/admin/professores'
+      preLoaderRoute: typeof AdminProfessoresRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/modalidades': {
+      id: '/admin/modalidades'
+      path: '/modalidades'
+      fullPath: '/admin/modalidades'
+      preLoaderRoute: typeof AdminModalidadesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/financeiro': {
+      id: '/admin/financeiro'
+      path: '/financeiro'
+      fullPath: '/admin/financeiro'
+      preLoaderRoute: typeof AdminFinanceiroRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/configuracoes': {
+      id: '/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AdminConfiguracoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/auditoria': {
+      id: '/admin/auditoria'
+      path: '/auditoria'
+      fullPath: '/admin/auditoria'
+      preLoaderRoute: typeof AdminAuditoriaRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/alunos': {
+      id: '/admin/alunos'
+      path: '/alunos'
+      fullPath: '/admin/alunos'
+      preLoaderRoute: typeof AdminAlunosRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminAlunosRoute: typeof AdminAlunosRoute
+  AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminFinanceiroRoute: typeof AdminFinanceiroRoute
+  AdminModalidadesRoute: typeof AdminModalidadesRoute
+  AdminProfessoresRoute: typeof AdminProfessoresRoute
+  AdminRelatoriosRoute: typeof AdminRelatoriosRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAlunosRoute: AdminAlunosRoute,
+  AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminConfiguracoesRoute: AdminConfiguracoesRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminFinanceiroRoute: AdminFinanceiroRoute,
+  AdminModalidadesRoute: AdminModalidadesRoute,
+  AdminProfessoresRoute: AdminProfessoresRoute,
+  AdminRelatoriosRoute: AdminRelatoriosRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface AlunoRouteChildren {
+  AlunoAulasRoute: typeof AlunoAulasRoute
+  AlunoDashboardRoute: typeof AlunoDashboardRoute
+  AlunoEvolucaoRoute: typeof AlunoEvolucaoRoute
+  AlunoFinanceiroRoute: typeof AlunoFinanceiroRoute
+  AlunoFrequenciaRoute: typeof AlunoFrequenciaRoute
+  AlunoGraduacaoRoute: typeof AlunoGraduacaoRoute
+  AlunoNotificacoesRoute: typeof AlunoNotificacoesRoute
+}
+
+const AlunoRouteChildren: AlunoRouteChildren = {
+  AlunoAulasRoute: AlunoAulasRoute,
+  AlunoDashboardRoute: AlunoDashboardRoute,
+  AlunoEvolucaoRoute: AlunoEvolucaoRoute,
+  AlunoFinanceiroRoute: AlunoFinanceiroRoute,
+  AlunoFrequenciaRoute: AlunoFrequenciaRoute,
+  AlunoGraduacaoRoute: AlunoGraduacaoRoute,
+  AlunoNotificacoesRoute: AlunoNotificacoesRoute,
+}
+
+const AlunoRouteWithChildren = AlunoRoute._addFileChildren(AlunoRouteChildren)
+
+interface ProfessorRouteChildren {
+  ProfessorAgendaRoute: typeof ProfessorAgendaRoute
+  ProfessorAlunosRoute: typeof ProfessorAlunosRoute
+  ProfessorCheckinRoute: typeof ProfessorCheckinRoute
+  ProfessorDashboardRoute: typeof ProfessorDashboardRoute
+  ProfessorGraduacoesRoute: typeof ProfessorGraduacoesRoute
+  ProfessorNotificacoesRoute: typeof ProfessorNotificacoesRoute
+  ProfessorPersonaisRoute: typeof ProfessorPersonaisRoute
+  ProfessorTurmasRoute: typeof ProfessorTurmasRoute
+}
+
+const ProfessorRouteChildren: ProfessorRouteChildren = {
+  ProfessorAgendaRoute: ProfessorAgendaRoute,
+  ProfessorAlunosRoute: ProfessorAlunosRoute,
+  ProfessorCheckinRoute: ProfessorCheckinRoute,
+  ProfessorDashboardRoute: ProfessorDashboardRoute,
+  ProfessorGraduacoesRoute: ProfessorGraduacoesRoute,
+  ProfessorNotificacoesRoute: ProfessorNotificacoesRoute,
+  ProfessorPersonaisRoute: ProfessorPersonaisRoute,
+  ProfessorTurmasRoute: ProfessorTurmasRoute,
+}
+
+const ProfessorRouteWithChildren = ProfessorRoute._addFileChildren(
+  ProfessorRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AlunoRoute: AlunoRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ProfessorRoute: ProfessorRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
