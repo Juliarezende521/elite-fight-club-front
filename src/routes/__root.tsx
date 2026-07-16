@@ -84,13 +84,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Plataforma de gestão para academias de lutas: aulas, frequência, graduações e financeiro.",
       },
-      { property: "og:title", content: "Elite Fight Club" },
+      { property: "og:title", content: "Elite Fight Club — Sistema de Gestão" },
       {
         property: "og:description",
-        content: "Sistema de gestão premium para academias de artes marciais.",
+        content: "Plataforma de gestão para academias de lutas: aulas, frequência, graduações e financeiro.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Elite Fight Club — Sistema de Gestão" },
+      { name: "twitter:description", content: "Plataforma de gestão para academias de lutas: aulas, frequência, graduações e financeiro." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a0718abf-5754-4d59-9d23-374eaf8e0460/id-preview-8305938e--e7c4ae75-a8d8-480a-a95e-1c1db7675d65.lovable.app-1784211783334.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a0718abf-5754-4d59-9d23-374eaf8e0460/id-preview-8305938e--e7c4ae75-a8d8-480a-a95e-1c1db7675d65.lovable.app-1784211783334.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
