@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { User } from "@/types";
-import { signOut } from "@/lib/auth";
+import { useAuth } from "@/lib/auth/context";
 
 const ROLE_LABEL: Record<User["role"], string> = {
   ALUNO: "Aluno",
@@ -22,6 +22,7 @@ const ROLE_LABEL: Record<User["role"], string> = {
 };
 
 export function AppHeader({ user }: { user: User }) {
+  const auth = useAuth();
   const initials = user.name
     .split(" ")
     .map((p) => p[0])
@@ -74,8 +75,8 @@ export function AppHeader({ user }: { user: User }) {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => {
-                void signOut();
+              onClick={async () => {
+                await auth.logout();
                 window.location.href = "/login";
               }}
             >

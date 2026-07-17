@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
-import { getAuthorizationToken } from "@/lib/auth";
+import { getAuthorizationToken } from "@/lib/auth/service";
 import { appEnv } from "@/lib/env";
 
 export interface ApiErrorPayload {

@@ -1,5 +1,6 @@
 export const queryKeys = {
   session: ["session"] as const,
+  authMe: ["auth", "me"] as const,
   alunoDashboard: ["aluno", "dashboard"] as const,
   alunoAulas: ["aluno", "aulas"] as const,
   alunoCheckIns: ["aluno", "check-ins"] as const,

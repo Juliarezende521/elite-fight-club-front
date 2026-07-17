@@ -4,23 +4,23 @@ Os mocks atuais estão centralizados em `src/mocks/index.ts` e alimentam o desig
 
 ## Classificação Atual
 
-| Domínio         | Mock atual                                 | Classificação                | Ação                                                                                               |
-| --------------- | ------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------- |
-| Usuários        | `mockUsers`                                | necessário para demonstração | substituir após login real + `/auth/me`                                                            |
-| Alunos          | `mockStudents`, `mockCurrentStudent`       | visual/mock                  | substituir por endpoints de alunos e dashboard                                                     |
-| Professores     | `mockProfessors`                           | visual/mock                  | substituir por endpoints de professores                                                            |
-| Modalidades     | `mockModalities`                           | visual/mock                  | substituir por `/api/graduacoes` apenas para graduação e endpoint de modalidades quando confirmado |
-| Aulas           | `mockClasses`                              | visual/mock                  | substituir por agenda/aulas/reservas                                                               |
-| Financeiro      | `mockInvoices`                             | visual/mock                  | substituir por faturas e pagamentos                                                                |
-| Notificações    | `mockNotifications`                        | visual/mock                  | substituir por endpoint de notificações quando confirmado                                          |
-| Graduação       | `mockPrajieds`, `mockGraduationEvents`     | visual/mock                  | substituir por endpoints de graduação/eventos                                                      |
-| Evolução física | `mockWeightHistory`                        | visual/mock                  | substituir por pesos, metas e avaliação corporal                                                   |
-| Frequência      | `mockCheckInHeatmap`, `mockWeeklyCheckIns` | visual/mock                  | substituir por check-ins reais                                                                     |
-| Relatórios      | `mockMonthlyRevenue`                       | visual/mock                  | substituir por relatórios confirmados                                                              |
+| Domínio         | Mock atual                                 | Classificação | Ação                                                                                               |
+| --------------- | ------------------------------------------ | ------------- | -------------------------------------------------------------------------------------------------- |
+| Usuários        | `mockUsers`                                | demo/dev      | mantido apenas quando `VITE_ENABLE_DEMO_MODE=true`; sessão real usa Firebase + `/auth/me`          |
+| Alunos          | `mockStudents`, `mockCurrentStudent`       | visual/mock   | substituir por endpoints de alunos e dashboard                                                     |
+| Professores     | `mockProfessors`                           | visual/mock   | substituir por endpoints de professores                                                            |
+| Modalidades     | `mockModalities`                           | visual/mock   | substituir por `/api/graduacoes` apenas para graduação e endpoint de modalidades quando confirmado |
+| Aulas           | `mockClasses`                              | visual/mock   | substituir por agenda/aulas/reservas                                                               |
+| Financeiro      | `mockInvoices`                             | visual/mock   | substituir por faturas e pagamentos                                                                |
+| Notificações    | `mockNotifications`                        | visual/mock   | substituir por endpoint de notificações quando confirmado                                          |
+| Graduação       | `mockPrajieds`, `mockGraduationEvents`     | visual/mock   | substituir por endpoints de graduação/eventos                                                      |
+| Evolução física | `mockWeightHistory`                        | visual/mock   | substituir por pesos, metas e avaliação corporal                                                   |
+| Frequência      | `mockCheckInHeatmap`, `mockWeeklyCheckIns` | visual/mock   | substituir por check-ins reais                                                                     |
+| Relatórios      | `mockMonthlyRevenue`                       | visual/mock   | substituir por relatórios confirmados                                                              |
 
 ## Ordem de Migração
 
-1. Autenticação real e sessão.
+1. Autenticação real e sessão. **Concluído.**
 2. Dashboard do aluno com `/api/alunos/me/dashboard`.
 3. Aulas e reservas.
 4. Check-ins.
