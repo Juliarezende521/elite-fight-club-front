@@ -1,11 +1,29 @@
 export type Role = "ALUNO" | "PROFESSOR" | "ADMIN";
 
+export interface Academia {
+  id: string;
+  nome: string;
+}
+
 export interface User {
   id: string;
   name: string;
   email: string;
   role: Role;
   avatarUrl?: string;
+}
+
+export interface AuthenticatedUser extends User {
+  academia?: Academia;
+}
+
+export interface ApiModalidade {
+  id: number;
+  nome: string;
+  descricao?: string;
+  corHex?: string;
+  icone?: string;
+  ativa: boolean;
 }
 
 export interface Modality {
@@ -46,12 +64,22 @@ export interface Student {
   weightGoal?: number;
 }
 
+export type Aluno = Student;
+
 export interface Professor {
   id: string;
   name: string;
   email: string;
   modalityIds: string[];
   active: boolean;
+}
+
+export interface Plano {
+  id: string;
+  tipo: "TURMA" | "PERSONAL";
+  quantidadeAulasSemana: number;
+  valor: number;
+  ativo: boolean;
 }
 
 export interface ClassSchedule {
@@ -66,6 +94,8 @@ export interface ClassSchedule {
   status: "aberta" | "lotada" | "cancelada" | "encerrada";
   studentId?: string;
 }
+
+export type Aula = ClassSchedule;
 
 export interface Reservation {
   id: string;
@@ -91,6 +121,8 @@ export interface Invoice {
   status: "em_dia" | "pendente" | "atrasado" | "pago";
   method?: Student["preferredPayment"];
 }
+
+export type Fatura = Invoice;
 
 export interface Payment {
   id: string;
@@ -126,11 +158,22 @@ export interface Notification {
   read: boolean;
 }
 
+export type Notificacao = Notification;
+
 export interface WeightRecord {
   id: string;
   studentId: string;
   date: string;
   weight: number;
+}
+
+export type EvolucaoPeso = WeightRecord;
+
+export interface MetaPeso {
+  id: string;
+  studentId: string;
+  targetWeight: number;
+  active: boolean;
 }
 
 export interface BodyAssessment {
@@ -143,3 +186,5 @@ export interface BodyAssessment {
   musclePct?: number;
   measurements?: Record<string, number>;
 }
+
+export type AvaliacaoCorporal = BodyAssessment;

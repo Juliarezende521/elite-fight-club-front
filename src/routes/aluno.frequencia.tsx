@@ -30,10 +30,25 @@ function Frequencia() {
       />
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total de check-ins" value={s.checkInsTotal} icon={<CheckCircle2 className="h-4 w-4" />} tone="success" />
-        <StatCard label="Este mês" value={s.checkInsMonth} icon={<CalendarCheck className="h-4 w-4" />} tone="info" />
+        <StatCard
+          label="Total de check-ins"
+          value={s.checkInsTotal}
+          icon={<CheckCircle2 className="h-4 w-4" />}
+          tone="success"
+        />
+        <StatCard
+          label="Este mês"
+          value={s.checkInsMonth}
+          icon={<CalendarCheck className="h-4 w-4" />}
+          tone="info"
+        />
         <StatCard label="Esta semana" value={4} icon={<CalendarCheck className="h-4 w-4" />} />
-        <StatCard label="Streak" value={`${s.streak} dias`} icon={<Flame className="h-4 w-4" />} tone="warning" />
+        <StatCard
+          label="Streak"
+          value={`${s.streak} dias`}
+          icon={<Flame className="h-4 w-4" />}
+          tone="warning"
+        />
       </div>
 
       <SectionCard title="Heatmap dos últimos 90 dias">
@@ -50,7 +65,9 @@ function Frequencia() {
                     key={d}
                     title={`${cell.date}: ${cell.count} check-ins`}
                     className="h-3 w-3 rounded-[3px]"
-                    style={{ backgroundColor: `color-mix(in oklab, var(--color-success) ${Math.round(opacity * 100)}%, var(--color-accent))` }}
+                    style={{
+                      backgroundColor: `color-mix(in oklab, var(--color-success) ${Math.round(opacity * 100)}%, var(--color-accent))`,
+                    }}
                   />
                 );
               })}

@@ -58,10 +58,16 @@ function Financeiro() {
             <tbody className="divide-y divide-border">
               {own.map((i) => (
                 <tr key={i.id}>
-                  <td className="py-3 text-foreground">{new Date(i.dueDate).toLocaleDateString("pt-BR")}</td>
-                  <td className="py-3 text-foreground">{i.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</td>
+                  <td className="py-3 text-foreground">
+                    {new Date(i.dueDate).toLocaleDateString("pt-BR")}
+                  </td>
+                  <td className="py-3 text-foreground">
+                    {i.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                  </td>
                   <td className="py-3 text-muted-foreground">{i.method}</td>
-                  <td className="py-3"><StatusBadge tone="success">Em dia</StatusBadge></td>
+                  <td className="py-3">
+                    <StatusBadge tone="success">Em dia</StatusBadge>
+                  </td>
                 </tr>
               ))}
             </tbody>

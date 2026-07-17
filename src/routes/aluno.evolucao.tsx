@@ -43,7 +43,11 @@ function Evolucao() {
             <div className="mb-3 grid gap-3 sm:grid-cols-3">
               <Stat label="Peso atual" value={`${s.weightCurrent} kg`} />
               <Stat label="Peso inicial" value={`${mockWeightHistory[0].weight} kg`} />
-              <Stat label="Diferença" value={`-${(mockWeightHistory[0].weight - (s.weightCurrent ?? 0)).toFixed(1)} kg`} tone="success" />
+              <Stat
+                label="Diferença"
+                value={`-${(mockWeightHistory[0].weight - (s.weightCurrent ?? 0)).toFixed(1)} kg`}
+                tone="success"
+              />
             </div>
             <div className="h-64 w-full">
               <ResponsiveContainer>
@@ -54,11 +58,40 @@ function Evolucao() {
                       <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                  <XAxis dataKey="date" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} domain={["dataMin - 1", "dataMax + 1"]} />
-                  <Tooltip contentStyle={{ background: "var(--color-card)", border: "1px solid var(--color-border)", borderRadius: 8, fontSize: 12 }} />
-                  <Area type="monotone" dataKey="peso" stroke="var(--color-primary)" strokeWidth={2} fill="url(#peso-full)" />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="var(--color-border)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="date"
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="var(--color-muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                    domain={["dataMin - 1", "dataMax + 1"]}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      background: "var(--color-card)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 8,
+                      fontSize: 12,
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="peso"
+                    stroke="var(--color-primary)"
+                    strokeWidth={2}
+                    fill="url(#peso-full)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -71,13 +104,20 @@ function Evolucao() {
               <Stat label="Inicial" value={`${mockWeightHistory[0].weight} kg`} />
               <Stat label="Atual" value={`${s.weightCurrent} kg`} />
               <Stat label="Meta" value={`${s.weightGoal} kg`} />
-              <Stat label="Restante" value={`${((s.weightCurrent ?? 0) - (s.weightGoal ?? 0)).toFixed(1)} kg`} tone="warning" />
+              <Stat
+                label="Restante"
+                value={`${((s.weightCurrent ?? 0) - (s.weightGoal ?? 0)).toFixed(1)} kg`}
+                tone="warning"
+              />
             </div>
           </SectionCard>
         </TabsContent>
 
         <TabsContent value="avaliacoes" className="mt-4">
-          <EmptyState title="Sem avaliações registradas" description="Peça ao seu professor a primeira avaliação corporal." />
+          <EmptyState
+            title="Sem avaliações registradas"
+            description="Peça ao seu professor a primeira avaliação corporal."
+          />
         </TabsContent>
         <TabsContent value="medidas" className="mt-4">
           <EmptyState title="Sem medidas registradas" />
@@ -90,8 +130,17 @@ function Evolucao() {
   );
 }
 
-function Stat({ label, value, tone }: { label: string; value: string; tone?: "success" | "warning" }) {
-  const cls = tone === "success" ? "text-success" : tone === "warning" ? "text-warning" : "text-foreground";
+function Stat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone?: "success" | "warning";
+}) {
+  const cls =
+    tone === "success" ? "text-success" : tone === "warning" ? "text-warning" : "text-foreground";
   return (
     <div className="rounded-md bg-background/60 p-3 ring-1 ring-border">
       <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>

@@ -74,7 +74,11 @@ function Notificacoes() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">{n.title}</span>
-                  {!n.read && <StatusBadge tone="info" dot={false}>Nova</StatusBadge>}
+                  {!n.read && (
+                    <StatusBadge tone="info" dot={false}>
+                      Nova
+                    </StatusBadge>
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground">{n.message}</p>
               </div>

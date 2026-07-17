@@ -31,10 +31,28 @@ function ProfessorDashboard() {
       />
 
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Aulas hoje" value={todays.length} icon={<CalendarDays className="h-4 w-4" />} tone="info" />
-        <StatCard label="Aulas na semana" value={mockClasses.length} icon={<CalendarDays className="h-4 w-4" />} />
-        <StatCard label="Personais" value={mockClasses.filter(c => c.type === "personal").length} icon={<Users className="h-4 w-4" />} />
-        <StatCard label="Alunos elegíveis" value={4} icon={<UserCheck className="h-4 w-4" />} tone="success" />
+        <StatCard
+          label="Aulas hoje"
+          value={todays.length}
+          icon={<CalendarDays className="h-4 w-4" />}
+          tone="info"
+        />
+        <StatCard
+          label="Aulas na semana"
+          value={mockClasses.length}
+          icon={<CalendarDays className="h-4 w-4" />}
+        />
+        <StatCard
+          label="Personais"
+          value={mockClasses.filter((c) => c.type === "personal").length}
+          icon={<Users className="h-4 w-4" />}
+        />
+        <StatCard
+          label="Alunos elegíveis"
+          value={4}
+          icon={<UserCheck className="h-4 w-4" />}
+          tone="success"
+        />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -52,9 +70,13 @@ function ProfessorDashboard() {
                       <span className="font-medium text-foreground">{mod?.name}</span>
                       <ModalityBadge id={c.modalityId} />
                     </div>
-                    <div className="text-xs text-muted-foreground">{prof?.name} · {c.reserved}/{c.capacity}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {prof?.name} · {c.reserved}/{c.capacity}
+                    </div>
                   </div>
-                  <StatusBadge tone={lotada ? "destructive" : "success"}>{lotada ? "Lotada" : "Aberta"}</StatusBadge>
+                  <StatusBadge tone={lotada ? "destructive" : "success"}>
+                    {lotada ? "Lotada" : "Aberta"}
+                  </StatusBadge>
                 </li>
               );
             })}

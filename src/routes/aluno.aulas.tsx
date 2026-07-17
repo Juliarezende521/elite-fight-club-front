@@ -42,9 +42,7 @@ function MinhasAulas() {
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-display text-sm text-foreground">
-                          {c.time}
-                        </span>
+                        <span className="font-display text-sm text-foreground">{c.time}</span>
                         <ModalityBadge id={c.modalityId} />
                         <StatusBadge tone={c.type === "personal" ? "info" : "muted"}>
                           {c.type === "personal" ? "Personal" : "Turma"}

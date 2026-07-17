@@ -48,7 +48,11 @@ function AlunosPage() {
               {mockStudents.map((s) => {
                 const prj = getPrajied(s.prajiedId);
                 const tone =
-                  s.financialStatus === "em_dia" ? "success" : s.financialStatus === "atrasado" ? "destructive" : "warning";
+                  s.financialStatus === "em_dia"
+                    ? "success"
+                    : s.financialStatus === "atrasado"
+                      ? "destructive"
+                      : "warning";
                 return (
                   <tr key={s.id}>
                     <td className="py-3">
@@ -57,16 +61,23 @@ function AlunosPage() {
                     </td>
                     <td className="py-3">
                       <div className="flex flex-wrap gap-1">
-                        {s.modalityIds.map((id) => <ModalityBadge key={id} id={id} />)}
+                        {s.modalityIds.map((id) => (
+                          <ModalityBadge key={id} id={id} />
+                        ))}
                       </div>
                     </td>
                     <td className="py-3">
                       <span className="inline-flex items-center gap-2">
-                        <span className="h-3 w-3 rounded-sm ring-1 ring-border" style={{ background: prj?.colorHex }} />
+                        <span
+                          className="h-3 w-3 rounded-sm ring-1 ring-border"
+                          style={{ background: prj?.colorHex }}
+                        />
                         <span className="text-foreground">{prj?.name}</span>
                       </span>
                     </td>
-                    <td className="py-3"><StatusBadge tone={tone}>{s.financialStatus.replace("_", " ")}</StatusBadge></td>
+                    <td className="py-3">
+                      <StatusBadge tone={tone}>{s.financialStatus.replace("_", " ")}</StatusBadge>
+                    </td>
                     <td className="py-3 text-muted-foreground">{s.checkInsMonth} este mês</td>
                   </tr>
                 );

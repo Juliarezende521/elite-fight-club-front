@@ -58,9 +58,7 @@ export function AppHeader({ user }: { user: User }) {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden text-left md:block">
-                <div className="text-xs font-medium leading-tight text-foreground">
-                  {user.name}
-                </div>
+                <div className="text-xs font-medium leading-tight text-foreground">{user.name}</div>
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   {ROLE_LABEL[user.role]}
                 </div>
@@ -77,7 +75,7 @@ export function AppHeader({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                signOut();
+                void signOut();
                 window.location.href = "/login";
               }}
             >
