@@ -34,8 +34,8 @@ function CheckinPage() {
         </SectionCard>
         <SectionCard title="Sessão atual" className="lg:col-span-2">
           <p className="text-sm text-muted-foreground">
-            Nenhuma sessão aberta. Ao iniciar, os alunos poderão fazer check-in
-            escaneando o QR fixo da academia.
+            Nenhuma sessão aberta. Ao iniciar, os alunos poderão fazer check-in escaneando o QR fixo
+            da academia.
           </p>
         </SectionCard>
       </div>

@@ -116,9 +116,7 @@ export function AppSidebar({ role }: { role: Role }) {
             <div className="font-display text-sm uppercase tracking-widest text-sidebar-foreground">
               Elite Fight
             </div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Club
-            </div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Club</div>
           </div>
         </div>
       </SidebarHeader>
@@ -156,7 +154,7 @@ export function AppSidebar({ role }: { role: Role }) {
             <SidebarMenuButton
               tooltip="Sair"
               onClick={() => {
-                signOut();
+                void signOut();
                 window.location.href = "/login";
               }}
             >

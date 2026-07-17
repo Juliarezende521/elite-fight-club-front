@@ -116,9 +116,22 @@ function AdminDashboard() {
         >
           <div className="h-64 w-full">
             <ResponsiveContainer>
-              <BarChart data={mockMonthlyRevenue} margin={{ left: -20, right: 6, top: 5, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                <XAxis dataKey="month" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+              <BarChart
+                data={mockMonthlyRevenue}
+                margin={{ left: -20, right: 6, top: 5, bottom: 0 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-border)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="month"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <YAxis
                   stroke="var(--color-muted-foreground)"
                   fontSize={11}
@@ -170,10 +183,28 @@ function AdminDashboard() {
           </div>
           <div className="h-40 w-full">
             <ResponsiveContainer>
-              <LineChart data={mockWeeklyCheckIns} margin={{ left: -20, right: 6, top: 5, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                <XAxis dataKey="day" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+              <LineChart
+                data={mockWeeklyCheckIns}
+                margin={{ left: -20, right: 6, top: 5, bottom: 0 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-border)"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="day"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-card)",
@@ -207,9 +238,7 @@ function AdminDashboard() {
                       {m.weeklyClasses} aulas/semana
                     </span>
                   </div>
-                  <span className="font-display text-sm text-foreground">
-                    {m.studentsCount}
-                  </span>
+                  <span className="font-display text-sm text-foreground">{m.studentsCount}</span>
                 </li>
               ))}
           </ul>
@@ -233,7 +262,7 @@ function AdminDashboard() {
               icon={<Wallet className="h-4 w-4" />}
               tone="info"
               title="Pix Automático"
-              description={`${mockStudents.filter(s => s.preferredPayment === "pix_auto").length} alunos usam Pix Automático.`}
+              description={`${mockStudents.filter((s) => s.preferredPayment === "pix_auto").length} alunos usam Pix Automático.`}
             />
           </ul>
         </SectionCard>
@@ -264,9 +293,7 @@ function AdminDashboard() {
                 return (
                   <tr key={inv.id}>
                     <td className="py-3 font-medium text-foreground">{student?.name}</td>
-                    <td className="py-3">
-                      {mid ? <ModalityBadge id={mid} /> : "—"}
-                    </td>
+                    <td className="py-3">{mid ? <ModalityBadge id={mid} /> : "—"}</td>
                     <td className="py-3 text-foreground">
                       {inv.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                     </td>
@@ -302,13 +329,17 @@ function Legendish({ color, label }: { color: string; label: string }) {
   );
 }
 
-function BigStat({ label, value, tone }: { label: string; value: string; tone: "muted" | "success" | "warning" }) {
+function BigStat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "muted" | "success" | "warning";
+}) {
   const cls =
-    tone === "success"
-      ? "text-success"
-      : tone === "warning"
-        ? "text-warning"
-        : "text-foreground";
+    tone === "success" ? "text-success" : tone === "warning" ? "text-warning" : "text-foreground";
   return (
     <div>
       <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</div>

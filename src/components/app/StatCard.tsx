@@ -43,18 +43,11 @@ export function StatCard({
         <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </div>
-        <div className="mt-2 font-display text-2xl leading-none text-foreground">
-          {value}
-        </div>
+        <div className="mt-2 font-display text-2xl leading-none text-foreground">{value}</div>
         {hint && <div className="mt-2 text-xs text-muted-foreground">{hint}</div>}
       </div>
       {icon && (
-        <div
-          className={cn(
-            "grid h-9 w-9 shrink-0 place-items-center rounded-md",
-            toneIcon[tone],
-          )}
-        >
+        <div className={cn("grid h-9 w-9 shrink-0 place-items-center rounded-md", toneIcon[tone])}>
           {icon}
         </div>
       )}

@@ -19,9 +19,19 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
-const ROLES: { role: Role; label: string; icon: React.ComponentType<{ className?: string }>; desc: string }[] = [
+const ROLES: {
+  role: Role;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  desc: string;
+}[] = [
   { role: "ALUNO", label: "Aluno", icon: UserIcon, desc: "Aulas, frequência e evolução." },
-  { role: "PROFESSOR", label: "Professor", icon: GraduationCap, desc: "Agenda, turmas e check-in." },
+  {
+    role: "PROFESSOR",
+    label: "Professor",
+    icon: GraduationCap,
+    desc: "Agenda, turmas e check-in.",
+  },
   { role: "ADMIN", label: "Admin", icon: ShieldCheck, desc: "Financeiro, relatórios e cadastros." },
 ];
 
@@ -37,9 +47,13 @@ function LoginPage() {
       toast.error("Preencha email e senha.");
       return;
     }
-    const s = signIn(role);
-    toast.success(`Bem-vindo, ${s.user.name.split(" ")[0]}!`);
-    navigate({ to: homePathFor(role) });
+    try {
+      const s = signIn(role);
+      toast.success(`Bem-vindo, ${s.user.name.split(" ")[0]}!`);
+      navigate({ to: homePathFor(role) });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível entrar.");
+    }
   }
 
   return (
@@ -67,13 +81,15 @@ function LoginPage() {
 
           <div>
             <h2 className="heading-hero text-4xl leading-tight text-foreground">
-              Treine.<br />
-              Evolua.<br />
+              Treine.
+              <br />
+              Evolua.
+              <br />
               <span className="text-primary">Conquiste.</span>
             </h2>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
-              Uma plataforma única para alunos, professores e gestores da sua
-              academia. Frequência, graduações, financeiro e agenda em um só lugar.
+              Uma plataforma única para alunos, professores e gestores da sua academia. Frequência,
+              graduações, financeiro e agenda em um só lugar.
             </p>
           </div>
 
@@ -113,16 +129,12 @@ function LoginPage() {
                   }
                 >
                   <r.icon
-                    className={
-                      "h-4 w-4 " + (active ? "text-primary" : "text-muted-foreground")
-                    }
+                    className={"h-4 w-4 " + (active ? "text-primary" : "text-muted-foreground")}
                   />
                   <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
                     {r.label}
                   </span>
-                  <span className="text-[10px] leading-tight text-muted-foreground">
-                    {r.desc}
-                  </span>
+                  <span className="text-[10px] leading-tight text-muted-foreground">{r.desc}</span>
                 </button>
               );
             })}

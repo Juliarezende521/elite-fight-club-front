@@ -11,14 +11,7 @@ import {
   Bell,
   ChevronRight,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { PageHeader } from "@/components/app/PageHeader";
 import { StatCard } from "@/components/app/StatCard";
@@ -107,9 +100,7 @@ function AlunoDashboard() {
                   <ModalityBadge key={id} id={id} />
                 ))}
               </div>
-              <h2 className="heading-hero mt-3 text-3xl text-foreground sm:text-4xl">
-                {s.name}
-              </h2>
+              <h2 className="heading-hero mt-3 text-3xl text-foreground sm:text-4xl">{s.name}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 {prajied ? `Faixa ${prajied.name}` : "—"} · streak de{" "}
                 <span className="text-warning">{s.streak} dias</span>
@@ -126,9 +117,7 @@ function AlunoDashboard() {
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
                   Próxima graduação
                 </div>
-                <div className="font-display text-base text-foreground">
-                  {next?.name ?? "—"}
-                </div>
+                <div className="font-display text-base text-foreground">{next?.name ?? "—"}</div>
               </div>
             </div>
           </div>
@@ -144,8 +133,8 @@ function AlunoDashboard() {
             </div>
             <Progress value={progressPct} className="mt-2 h-2" />
             <div className="mt-1 text-[11px] text-muted-foreground">
-              Faltam {Math.max(0, s.requiredCheckIns - s.checkInsTotal)} check-ins ·{" "}
-              {progressPct}% concluído
+              Faltam {Math.max(0, s.requiredCheckIns - s.checkInsTotal)} check-ins · {progressPct}%
+              concluído
             </div>
           </div>
         </div>
@@ -195,22 +184,14 @@ function AlunoDashboard() {
         <StatCard
           label="Peso atual"
           value={`${s.weightCurrent} kg`}
-          hint={
-            <span className="text-success">
-              -{weightLoss.toFixed(1)} kg em 90 dias
-            </span>
-          }
+          hint={<span className="text-success">-{weightLoss.toFixed(1)} kg em 90 dias</span>}
           icon={<TrendingDown className="h-4 w-4" />}
           tone="info"
         />
         <StatCard
           label="Próxima graduação"
           value={next?.name ?? "—"}
-          hint={
-            goalDelta > 0
-              ? `Faltam ${goalDelta.toFixed(1)} kg para a meta`
-              : "Meta atingida"
-          }
+          hint={goalDelta > 0 ? `Faltam ${goalDelta.toFixed(1)} kg para a meta` : "Meta atingida"}
           icon={<Award className="h-4 w-4" />}
         />
       </div>
@@ -239,18 +220,13 @@ function AlunoDashboard() {
                 const professor = getProfessor(c.professorId);
                 const lotada = c.reserved >= c.capacity;
                 return (
-                  <li
-                    key={c.id}
-                    className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-3"
-                  >
+                  <li key={c.id} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-3">
                     <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-accent">
                       <Dumbbell className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-foreground">
-                          {modality?.name}
-                        </span>
+                        <span className="font-medium text-foreground">{modality?.name}</span>
                         <ModalityBadge id={c.modalityId} />
                       </div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
@@ -276,12 +252,8 @@ function AlunoDashboard() {
 
         <SectionCard title="Evolução do peso">
           <div className="mb-2 flex items-baseline justify-between">
-            <div className="font-display text-2xl text-foreground">
-              {s.weightCurrent} kg
-            </div>
-            <div className="text-xs text-success">
-              -{weightLoss.toFixed(1)} kg / 90d
-            </div>
+            <div className="font-display text-2xl text-foreground">{s.weightCurrent} kg</div>
+            <div className="text-xs text-success">-{weightLoss.toFixed(1)} kg / 90d</div>
           </div>
           <div className="h-40 w-full">
             <ResponsiveContainer>
@@ -319,10 +291,7 @@ function AlunoDashboard() {
           </div>
         </SectionCard>
 
-        <SectionCard
-          className="lg:col-span-2"
-          title="Próximas aulas"
-        >
+        <SectionCard className="lg:col-span-2" title="Próximas aulas">
           <div className="grid gap-2 sm:grid-cols-2">
             {upcoming.map((c) => {
               const modality = getModality(c.modalityId);
@@ -336,7 +305,11 @@ function AlunoDashboard() {
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="font-display text-sm uppercase tracking-wide text-foreground">
-                        {d.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "short" })}
+                        {d.toLocaleDateString("pt-BR", {
+                          weekday: "short",
+                          day: "2-digit",
+                          month: "short",
+                        })}
                       </span>
                       <span className="text-xs text-muted-foreground">· {c.time}</span>
                     </div>
@@ -378,12 +351,8 @@ function AlunoDashboard() {
                   <Bell className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-foreground">
-                    {n.title}
-                  </div>
-                  <div className="line-clamp-2 text-xs text-muted-foreground">
-                    {n.message}
-                  </div>
+                  <div className="truncate text-sm font-medium text-foreground">{n.title}</div>
+                  <div className="line-clamp-2 text-xs text-muted-foreground">{n.message}</div>
                 </div>
               </li>
             ))}

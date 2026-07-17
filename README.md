@@ -2,6 +2,8 @@
 
 Interface web moderna, responsiva e premium para o **Elite Fight Club**, sistema de gestão de academias de artes marciais e lutas.
 
+Este repositório é o **frontend oficial aprovado no Lovable**. O visual deve ser preservado durante a integração gradual com o backend Spring Boot.
+
 Construída com **TanStack Start**, **React 19**, **Tailwind CSS v4** e **shadcn/ui**, a aplicação entrega uma experiência inspirada em dashboards esportivos de alto padrão, com identidade visual escura, tipografia marcante e navegação fluida entre os perfis de **Aluno**, **Professor** e **Administrador**.
 
 ---
@@ -33,26 +35,28 @@ Construída com **TanStack Start**, **React 19**, **Tailwind CSS v4** e **shadcn
 - 🎨 Tema dark premium com tokens semânticos OKLCH
 - 📱 Layout totalmente responsivo (desktop, tablet e mobile)
 - 📊 Gráficos interativos com Recharts
-- 🔐 Simulação de autenticação por perfil via `localStorage`
-- 🚀 Preparado para integração com backend Spring Boot via Axios
+- 🔐 Modo demonstração isolado por variável de ambiente
+- 🔥 Firebase Auth preparado para login real
+- 🚀 Cliente Axios preparado para integração com backend Spring Boot
 - ♿ Componentes acessíveis com Radix UI
 
 ---
 
 ## 🛠️ Stack tecnológica
 
-| Tecnologia | Versão | Uso |
-|------------|--------|-----|
-| TanStack Start | v1 | Framework full-stack React com SSR/SSG |
-| React | 19 | Biblioteca de UI |
-| TypeScript | 5.x | Tipagem estática |
-| Tailwind CSS | 4.x | Estilização utilitária |
-| shadcn/ui + Radix | — | Componentes de interface |
-| TanStack Query | 5.x | Gerenciamento de dados |
-| Recharts | 2.x | Visualização de dados |
-| Axios | 1.x | Cliente HTTP para API |
-| date-fns | 4.x | Manipulação de datas |
-| Lucide React | — | Ícones |
+| Tecnologia        | Versão | Uso                                    |
+| ----------------- | ------ | -------------------------------------- |
+| TanStack Start    | v1     | Framework full-stack React com SSR/SSG |
+| React             | 19     | Biblioteca de UI                       |
+| TypeScript        | 5.x    | Tipagem estática                       |
+| Tailwind CSS      | 4.x    | Estilização utilitária                 |
+| shadcn/ui + Radix | —      | Componentes de interface               |
+| TanStack Query    | 5.x    | Gerenciamento de dados                 |
+| Recharts          | 2.x    | Visualização de dados                  |
+| Axios             | 1.x    | Cliente HTTP para API                  |
+| Firebase          | 12.x   | Autenticação client-side               |
+| date-fns          | 4.x    | Manipulação de datas                   |
+| Lucide React      | —      | Ícones                                 |
 
 ---
 
@@ -67,8 +71,8 @@ Construída com **TanStack Start**, **React 19**, **Tailwind CSS v4** e **shadcn
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/seu-usuario/elite-fight-club-frontend.git
-cd elite-fight-club-frontend
+git clone https://github.com/Juliarezende521/elite-fight-club-front.git
+cd elite-fight-club-front
 
 # 2. Instale as dependências
 bun install
@@ -79,21 +83,47 @@ bun dev
 # ou: npm run dev
 ```
 
-Acesse `http://localhost:8080` no navegador.
+A porta local é definida pelo Vite/TanStack Start. Normalmente o app roda em `http://localhost:5173`.
+
+## ⚙️ Variáveis de ambiente
+
+Crie um `.env.local` local com base no `.env.example`.
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+VITE_ENABLE_DEMO_MODE=false
+
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_APP_ID=
+```
+
+Nunca versionar `.env`, `.env.local` ou credenciais reais.
 
 ---
 
 ## 🔐 Login e perfis
 
-A tela de login permite escolher entre três perfis de acesso para teste:
+A tela de login preserva o fluxo visual aprovado. A escolha livre de perfil é apenas modo demonstração e deve ficar habilitada somente com:
 
-| Perfil | Acesso principal |
-|--------|------------------|
-| Aluno | `/aluno/dashboard` |
-| Professor | `/professor/dashboard` |
-| Administrador | `/admin/dashboard` |
+```env
+VITE_ENABLE_DEMO_MODE=true
+```
 
-A autenticação atual é simulada no `localStorage`. Para integrar com um backend real, ajuste o endpoint em `VITE_API_BASE_URL` e a lógica em `src/lib/auth.ts`.
+| Perfil        | Acesso principal       |
+| ------------- | ---------------------- |
+| Aluno         | `/aluno/dashboard`     |
+| Professor     | `/professor/dashboard` |
+| Administrador | `/admin/dashboard`     |
+
+No fluxo real, o usuário entra pelo Firebase Auth, o frontend obtém o Firebase ID Token e o envia ao Spring Boot em:
+
+```http
+Authorization: Bearer <firebase_id_token>
+```
+
+O perfil definitivo deve vir do backend, não do `localStorage`.
 
 ---
 
@@ -104,7 +134,7 @@ src/
 ├── components/          # Componentes reutilizáveis
 │   ├── app/             # Componentes de aplicação (sidebar, header, cards)
 │   └── ui/              # Componentes shadcn/ui
-├── lib/                 # Utilitários, autenticação e API
+├── lib/                 # Utilitários, autenticação, Firebase, API e query keys
 ├── mocks/               # Dados mockados para desenvolvimento
 ├── routes/              # Rotas do TanStack Router
 │   ├── aluno.*.tsx      # Área do aluno
@@ -120,13 +150,23 @@ src/
 
 ## 🔌 Integração com backend
 
-O projeto já possui uma instância do Axios configurada em `src/lib/api.ts` para apontar para a variável de ambiente:
+O projeto possui uma instância centralizada do Axios em `src/lib/api.ts` com:
+
+- `baseURL` por `VITE_API_BASE_URL`;
+- timeout;
+- `Content-Type: application/json`;
+- envio automático do Bearer token Firebase quando disponível;
+- normalização de erros em `ApiError`.
 
 ```env
-VITE_API_BASE_URL=https://sua-api-elite-fight-club.com/api
+VITE_API_BASE_URL=http://localhost:8080
 ```
 
-O interceptor adiciona automaticamente o header `Authorization: Bearer <token>` quando o usuário está autenticado.
+Documentação complementar:
+
+- `docs/FRONTEND_INTEGRATION_PLAN.md`
+- `docs/API_INTEGRATION_MAP.md`
+- `docs/MOCK_MIGRATION_PLAN.md`
 
 ---
 
@@ -138,7 +178,16 @@ bun build        # Gera a build de produção
 bun build:dev    # Gera a build em modo desenvolvimento
 bun preview      # Previsualiza a build de produção
 bun lint         # Executa o ESLint
+bun typecheck    # Checa TypeScript
 bun format       # Formata o código com Prettier
+```
+
+Se estiver usando npm:
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
 ```
 
 ---

@@ -39,7 +39,9 @@ function Graduacao() {
               <div className="mt-3">
                 <div className="mb-1 flex justify-between text-xs text-muted-foreground">
                   <span>Progresso</span>
-                  <span>{s.checkInsTotal}/{s.requiredCheckIns}</span>
+                  <span>
+                    {s.checkInsTotal}/{s.requiredCheckIns}
+                  </span>
                 </div>
                 <Progress value={pct} className="h-2" />
               </div>
@@ -52,9 +54,18 @@ function Graduacao() {
 
         <SectionCard title="Requisitos">
           <ul className="space-y-2 text-sm">
-            <li className="flex justify-between"><span className="text-muted-foreground">Check-ins mínimos</span><span className="text-foreground">{next?.minCheckIns ?? "—"}</span></li>
-            <li className="flex justify-between"><span className="text-muted-foreground">Tempo mínimo</span><span className="text-foreground">{next?.minMonths ?? "—"} meses</span></li>
-            <li className="flex justify-between"><span className="text-muted-foreground">Certificados</span><span className="text-foreground">Aguardando</span></li>
+            <li className="flex justify-between">
+              <span className="text-muted-foreground">Check-ins mínimos</span>
+              <span className="text-foreground">{next?.minCheckIns ?? "—"}</span>
+            </li>
+            <li className="flex justify-between">
+              <span className="text-muted-foreground">Tempo mínimo</span>
+              <span className="text-foreground">{next?.minMonths ?? "—"} meses</span>
+            </li>
+            <li className="flex justify-between">
+              <span className="text-muted-foreground">Certificados</span>
+              <span className="text-foreground">Aguardando</span>
+            </li>
           </ul>
         </SectionCard>
 
@@ -64,19 +75,29 @@ function Graduacao() {
               const modality = getModality(ev.modalityId);
               const prj = getPrajied(ev.prajiedId);
               return (
-                <div key={ev.id} className="flex items-center justify-between gap-3 rounded-md bg-background/60 p-4 ring-1 ring-border">
+                <div
+                  key={ev.id}
+                  className="flex items-center justify-between gap-3 rounded-md bg-background/60 p-4 ring-1 ring-border"
+                >
                   <div className="min-w-0">
                     <div className="font-display text-lg text-foreground">
                       {modality?.name} · {prj?.name}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {new Date(ev.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })} · {ev.location}
+                      {new Date(ev.date).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      })}{" "}
+                      · {ev.location}
                     </div>
                     <div className="mt-1 text-sm text-foreground">
                       {ev.fee.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                     </div>
                   </div>
-                  <Button size="sm" variant="outline">Inscrever-se</Button>
+                  <Button size="sm" variant="outline">
+                    Inscrever-se
+                  </Button>
                 </div>
               );
             })}
