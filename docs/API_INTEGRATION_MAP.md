@@ -4,10 +4,10 @@ Este mapa contém apenas endpoints confirmados na documentação `FRONTEND_READY
 
 ## Autenticação
 
-| Uso                           | Método | Endpoint          | Observação                                                             |
-| ----------------------------- | ------ | ----------------- | ---------------------------------------------------------------------- |
-| Sessão do usuário autenticado | `GET`  | `/auth/me`        | Retorna usuário autenticado. Deve ser usado para resolver perfil real. |
-| Registro público              | `POST` | `/auth/registrar` | Público. Não usar para login comum do app nesta etapa.                 |
+| Uso                           | Método | Endpoint          | Observação                                                                               |
+| ----------------------------- | ------ | ----------------- | ---------------------------------------------------------------------------------------- |
+| Sessão do usuário autenticado | `GET`  | `/auth/me`        | Retorna DTO de sessão autenticada. Resolve perfil real, academia, alunoId e professorId. |
+| Registro público              | `POST` | `/auth/registrar` | Público. Não usar para login comum do app nesta etapa.                                   |
 
 ## Dashboard do Aluno
 
@@ -89,7 +89,32 @@ O frontend normaliza respostas em `ApiError` com:
 - `timestamp`
 - `path`
 
+Na autenticação:
+
+- `401`: sessão inválida ou token expirado;
+- `403`: usuário sem permissão;
+- `404`: usuário autenticado no Firebase sem cadastro no backend;
+- `5xx`: backend indisponível.
+
+## DTO de sessão
+
+```ts
+interface AuthenticatedUserResponse {
+  id: number;
+  nome: string;
+  email: string;
+  perfil: "ADMIN" | "PROFESSOR" | "ALUNO";
+  ativo: boolean;
+  academia: {
+    id: number;
+    nome: string;
+    status?: string;
+  } | null;
+  alunoId: number | null;
+  professorId: number | null;
+}
+```
+
 ## Bloqueios / Lacunas
 
-- Confirmar o formato exato de retorno de `/auth/me` antes de ligar a sessão real nas telas.
 - Alguns endpoints legados ainda retornam entidades JPA diretamente; preferir endpoints novos com DTO quando existirem.

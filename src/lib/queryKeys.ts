@@ -1,11 +1,17 @@
 export const queryKeys = {
   session: ["session"] as const,
+  authMe: ["auth", "me"] as const,
   alunoDashboard: ["aluno", "dashboard"] as const,
   alunoAulas: ["aluno", "aulas"] as const,
   alunoCheckIns: ["aluno", "check-ins"] as const,
   alunoFaturas: ["aluno", "faturas"] as const,
+  alunoPreferenciaPagamento: ["aluno", "preferencia-pagamento"] as const,
+  alunoGraduacao: ["aluno", "graduacao"] as const,
+  alunoEventosGraduacao: ["aluno", "eventos-graduacao"] as const,
   notificacoes: ["notificacoes"] as const,
   modalidades: ["modalidades"] as const,
   professores: ["professores"] as const,
   adminDashboard: ["admin", "dashboard"] as const,
+  adminAlunos: ["admin", "alunos"] as const,
+  adminPlanos: ["admin", "planos"] as const,
 };

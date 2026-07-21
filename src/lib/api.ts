@@ -1,11 +1,14 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
-import { getAuthorizationToken } from "@/lib/auth";
+import { getAuthorizationToken } from "@/lib/auth/service";
 import { appEnv } from "@/lib/env";
 
 export interface ApiErrorPayload {
   status?: number;
   message?: string;
+  mensagem?: string;
+  erro?: string;
   fields?: Record<string, string>;
+  campos?: Record<string, string>;
   fieldErrors?: Record<string, string>;
   timestamp?: string;
   path?: string;
@@ -20,13 +23,13 @@ export class ApiError extends Error {
   code?: string;
 
   constructor(payload: ApiErrorPayload = {}) {
-    super(payload.message ?? "Não foi possível concluir a solicitação.");
+    super(payload.message ?? payload.mensagem ?? "Não foi possível concluir a solicitação.");
     this.name = "ApiError";
     this.status = payload.status;
-    this.fieldErrors = payload.fieldErrors ?? payload.fields;
+    this.fieldErrors = payload.fieldErrors ?? payload.fields ?? payload.campos;
     this.timestamp = payload.timestamp;
     this.path = payload.path;
-    this.code = payload.code;
+    this.code = payload.code ?? payload.erro;
   }
 }
 
@@ -57,12 +60,12 @@ api.interceptors.response.use(
 
     throw new ApiError({
       status,
-      message: payload.message ?? fallbackMessage(status),
-      fields: payload.fields,
-      fieldErrors: payload.fieldErrors,
+      message: payload.message ?? payload.mensagem ?? fallbackMessage(status),
+      fields: payload.fields ?? payload.campos,
+      fieldErrors: payload.fieldErrors ?? payload.campos,
       timestamp: payload.timestamp,
       path: payload.path ?? error.config?.url,
-      code: payload.code,
+      code: payload.code ?? payload.erro,
     });
   },
 );

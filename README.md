@@ -35,9 +35,9 @@ Construída com **TanStack Start**, **React 19**, **Tailwind CSS v4** e **shadcn
 - 🎨 Tema dark premium com tokens semânticos OKLCH
 - 📱 Layout totalmente responsivo (desktop, tablet e mobile)
 - 📊 Gráficos interativos com Recharts
-- 🔐 Modo demonstração isolado por variável de ambiente
-- 🔥 Firebase Auth preparado para login real
-- 🚀 Cliente Axios preparado para integração com backend Spring Boot
+- 🔐 Login real com Firebase Auth e sessão validada no Spring Boot
+- 🧭 Redirecionamento e proteção de rotas por perfil retornado pelo backend
+- 🚀 Cliente Axios integrado ao backend com Bearer Token
 - ♿ Componentes acessíveis com Radix UI
 
 ---
@@ -123,7 +123,41 @@ No fluxo real, o usuário entra pelo Firebase Auth, o frontend obtém o Firebase
 Authorization: Bearer <firebase_id_token>
 ```
 
-O perfil definitivo deve vir do backend, não do `localStorage`.
+Depois disso, o frontend chama:
+
+```http
+GET /auth/me
+```
+
+Resposta esperada:
+
+```json
+{
+  "id": 10,
+  "nome": "Rafael Moreira",
+  "email": "rafael@elitefc.com",
+  "perfil": "ALUNO",
+  "ativo": true,
+  "academia": {
+    "id": 1,
+    "nome": "Elite Fight Club",
+    "status": "ATIVA"
+  },
+  "alunoId": 20,
+  "professorId": null
+}
+```
+
+O perfil definitivo vem do backend. O frontend não usa `localStorage`, rota ou query string como fonte de permissão.
+
+Estados tratados:
+
+- login Firebase sem cadastro no backend;
+- usuário sem academia;
+- usuário inativo, quando informado pelo backend;
+- acesso negado;
+- backend indisponível;
+- sessão expirada.
 
 ---
 

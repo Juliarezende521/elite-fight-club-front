@@ -1,34 +1,33 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Award,
   CalendarDays,
+  CheckCircle2,
+  ChevronRight,
   Dumbbell,
   Flame,
   QrCode,
   TrendingDown,
   Wallet,
-  CheckCircle2,
-  Bell,
-  ChevronRight,
 } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
+import { EmptyState, ErrorStateBox, LoadingState } from "@/components/app/EmptyState";
 import { PageHeader } from "@/components/app/PageHeader";
-import { StatCard } from "@/components/app/StatCard";
 import { SectionCard } from "@/components/app/SectionCard";
+import { StatCard } from "@/components/app/StatCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
-import { ModalityBadge } from "@/components/app/ModalityBadge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/lib/auth/context";
+import { queryKeys } from "@/lib/queryKeys";
 import {
-  mockCurrentStudent,
-  mockClasses,
-  mockNotifications,
-  mockWeightHistory,
-  getPrajied,
-  getModality,
-  getProfessor,
-} from "@/mocks";
+  calculateCurrentStreak,
+  fetchStudentCheckIns,
+  fetchStudentDashboard,
+  getLastDaysRange,
+  type StudentClassSummary,
+} from "@/lib/student-dashboard";
 
 export const Route = createFileRoute("/aluno/dashboard")({
   head: () => ({
@@ -40,35 +39,67 @@ export const Route = createFileRoute("/aluno/dashboard")({
   component: AlunoDashboard,
 });
 
+const historyRange = getLastDaysRange(90);
+
 function AlunoDashboard() {
-  const s = mockCurrentStudent;
-  const prajied = getPrajied(s.prajiedId);
-  const next = s.nextPrajiedId ? getPrajied(s.nextPrajiedId) : undefined;
-  const progressPct = Math.min(
-    100,
-    Math.round((s.checkInsTotal / (s.requiredCheckIns || 1)) * 100),
-  );
-  const weightLoss = mockWeightHistory[0].weight - (s.weightCurrent ?? 0);
-  const goalDelta = (s.weightCurrent ?? 0) - (s.weightGoal ?? 0);
-  const weightChart = mockWeightHistory.map((w) => ({
-    date: w.date.slice(5, 10),
-    peso: w.weight,
-  }));
-
-  const todaysClasses = mockClasses.filter((c) => {
-    const d = new Date(c.date);
-    const t = new Date();
-    return d.toDateString() === t.toDateString();
+  const { authenticatedUser } = useAuth();
+  const dashboardQuery = useQuery({
+    queryKey: queryKeys.alunoDashboard,
+    queryFn: fetchStudentDashboard,
   });
-  const upcoming = mockClasses.slice(0, 4);
+  const checkInsQuery = useQuery({
+    queryKey: [...queryKeys.alunoCheckIns, historyRange.inicio, historyRange.fim],
+    queryFn: () => fetchStudentCheckIns(historyRange.inicio, historyRange.fim),
+  });
 
-  const unread = mockNotifications.filter((n) => !n.read);
+  const data = dashboardQuery.data;
+  const firstName = (data?.nome ?? authenticatedUser?.nome ?? "aluno").split(" ")[0];
+
+  if (dashboardQuery.isLoading) {
+    return (
+      <>
+        <PageHeader
+          breadcrumbs={[{ label: "Aluno" }, { label: "Dashboard" }]}
+          title={`Olá, ${firstName}`}
+          subtitle="Aqui está um resumo do seu treino, evolução e conta."
+        />
+        <LoadingState label="Carregando seus dados..." />
+      </>
+    );
+  }
+
+  if (dashboardQuery.isError || !data) {
+    return (
+      <>
+        <PageHeader
+          breadcrumbs={[{ label: "Aluno" }, { label: "Dashboard" }]}
+          title={`Olá, ${firstName}`}
+          subtitle="Aqui está um resumo do seu treino, evolução e conta."
+        />
+        <ErrorStateBox message="Não foi possível carregar seu dashboard agora." />
+      </>
+    );
+  }
+
+  const checkIns = data.checkIns;
+  const prajied = data.prajied;
+  const financeiro = data.financeiro;
+  const plano = data.plano;
+  const peso = data.evolucaoPeso;
+  const metaPeso = data.metaPeso;
+  const checkInHistory = checkInsQuery.data?.checkIns ?? [];
+  const streak = calculateCurrentStreak(checkInHistory);
+  const progressPct = Number(prajied?.percentualProgresso ?? 0);
+  const requiredCheckIns = prajied?.checkInsNecessariosProximaGraduacao ?? 0;
+  const currentCheckIns = prajied?.checkInsAtuais ?? checkIns?.total ?? 0;
+  const aulasHoje = data.aulasHoje ?? [];
+  const proximasAulas = (data.aulasSemana ?? []).slice(0, 4);
 
   return (
     <>
       <PageHeader
         breadcrumbs={[{ label: "Aluno" }, { label: "Dashboard" }]}
-        title={`Olá, ${s.name.split(" ")[0]}`}
+        title={`Olá, ${firstName}`}
         subtitle="Aqui está um resumo do seu treino, evolução e conta."
         actions={
           <>
@@ -86,38 +117,39 @@ function AlunoDashboard() {
         }
       />
 
-      {/* Hero card */}
       <div className="mb-6 grid gap-4 lg:grid-cols-3">
         <div className="relative overflow-hidden rounded-lg bg-card p-5 ring-1 ring-border lg:col-span-2">
           <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
           <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge tone={s.status === "ativo" ? "success" : "muted"}>
-                  {s.status === "ativo" ? "Ativo" : "Inativo"}
+                <StatusBadge tone={data.ativo ? "success" : "muted"}>
+                  {data.ativo ? "Ativo" : "Inativo"}
                 </StatusBadge>
-                {s.modalityIds.map((id) => (
-                  <ModalityBadge key={id} id={id} />
-                ))}
+                {plano?.tipo && <StudentTypeBadge tipo={plano.tipo} />}
               </div>
-              <h2 className="heading-hero mt-3 text-3xl text-foreground sm:text-4xl">{s.name}</h2>
+              <h2 className="heading-hero mt-3 text-3xl text-foreground sm:text-4xl">
+                {data.nome}
+              </h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {prajied ? `Faixa ${prajied.name}` : "—"} · streak de{" "}
-                <span className="text-warning">{s.streak} dias</span>
+                {prajied ? `Faixa ${prajied.nome}` : "Graduação inicial não configurada"} · streak
+                de <span className="text-warning">{streak} dias</span>
               </p>
             </div>
 
             <div className="flex items-center gap-3 rounded-md bg-background/60 p-3 ring-1 ring-border">
               <div
                 className="h-10 w-10 rounded-md ring-2 ring-border"
-                style={{ backgroundColor: prajied?.colorHex }}
+                style={{ backgroundColor: prajied?.corHex ?? "var(--color-accent)" }}
                 aria-hidden
               />
               <div>
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
                   Próxima graduação
                 </div>
-                <div className="font-display text-base text-foreground">{next?.name ?? "—"}</div>
+                <div className="font-display text-base text-foreground">
+                  {prajied?.proximoPrajiedNome ?? "Sem próxima graduação"}
+                </div>
               </div>
             </div>
           </div>
@@ -128,13 +160,14 @@ function AlunoDashboard() {
                 Progresso para a próxima faixa
               </span>
               <span className="font-display text-foreground">
-                {s.checkInsTotal} / {s.requiredCheckIns}
+                {currentCheckIns} / {requiredCheckIns}
               </span>
             </div>
             <Progress value={progressPct} className="mt-2 h-2" />
             <div className="mt-1 text-[11px] text-muted-foreground">
-              Faltam {Math.max(0, s.requiredCheckIns - s.checkInsTotal)} check-ins · {progressPct}%
-              concluído
+              {prajied
+                ? `Faltam ${Math.max(0, prajied.checkInsFaltantes ?? 0)} check-ins · ${Math.round(progressPct)}% concluído`
+                : "Graduação inicial não configurada"}
             </div>
           </div>
         </div>
@@ -145,16 +178,24 @@ function AlunoDashboard() {
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
                 Mensalidade
               </div>
-              <div className="mt-2 font-display text-2xl text-foreground">R$ 289,90</div>
+              <div className="mt-2 font-display text-2xl text-foreground">
+                {formatCurrency(financeiro?.valorTotal ?? plano?.valor ?? 0)}
+              </div>
             </div>
-            <StatusBadge tone={s.financialStatus === "em_dia" ? "success" : "warning"}>
-              {s.financialStatus === "em_dia" ? "Em dia" : "Pendente"}
+            <StatusBadge tone={financeiro?.emDia ? "success" : "warning"}>
+              {formatFinancialStatus(financeiro?.status, financeiro?.emDia)}
             </StatusBadge>
           </div>
           <div className="mt-4 space-y-2 text-xs">
-            <Row label="Vencimento" value="10 do próximo mês" />
-            <Row label="Forma preferida" value="Pix Automático" />
-            <Row label="Último pagamento" value="10/07/2026" />
+            <Row label="Vencimento" value={formatDate(financeiro?.vencimento) ?? "Sem fatura"} />
+            <Row
+              label="Forma preferida"
+              value={data.preferenciaPagamento?.formaPreferida ?? "Não informada"}
+            />
+            <Row
+              label="Saldo"
+              value={financeiro?.faturaAtualId ? formatCurrency(financeiro.saldo) : "Sem fatura"}
+            />
           </div>
           <Button variant="outline" size="sm" className="mt-4 w-full" asChild>
             <Link to="/aluno/financeiro">
@@ -165,38 +206,46 @@ function AlunoDashboard() {
         </div>
       </div>
 
-      {/* Stat grid */}
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Check-ins no mês"
-          value={s.checkInsMonth}
-          hint={<span className="text-success">+3 vs. mês anterior</span>}
+          value={checkIns?.noMesAtual ?? 0}
+          hint={
+            (checkIns?.total ?? 0) === 0 ? "Nenhum check-in registrado" : "Dados reais do aluno"
+          }
           icon={<CheckCircle2 className="h-4 w-4" />}
           tone="success"
         />
         <StatCard
           label="Streak"
-          value={`${s.streak} dias`}
-          hint="Continue o ritmo!"
+          value={`${streak} dias`}
+          hint={streak === 0 ? "Faça check-in para iniciar" : "Continue o ritmo!"}
           icon={<Flame className="h-4 w-4" />}
           tone="warning"
         />
         <StatCard
           label="Peso atual"
-          value={`${s.weightCurrent} kg`}
-          hint={<span className="text-success">-{weightLoss.toFixed(1)} kg em 90 dias</span>}
+          value={peso?.pesoAtual ? `${formatNumber(peso.pesoAtual)} kg` : "—"}
+          hint={
+            peso?.pesoAtual
+              ? formatWeightDifference(peso.diferencaPeso)
+              : "Peso ainda não informado"
+          }
           icon={<TrendingDown className="h-4 w-4" />}
           tone="info"
         />
         <StatCard
           label="Próxima graduação"
-          value={next?.name ?? "—"}
-          hint={goalDelta > 0 ? `Faltam ${goalDelta.toFixed(1)} kg para a meta` : "Meta atingida"}
+          value={prajied?.proximoPrajiedNome ?? "—"}
+          hint={
+            metaPeso?.quantidadeRestante
+              ? `Faltam ${formatNumber(metaPeso.quantidadeRestante)} kg para a meta`
+              : "Sem meta ativa"
+          }
           icon={<Award className="h-4 w-4" />}
         />
       </div>
 
-      {/* Two-column */}
       <div className="grid gap-4 lg:grid-cols-3">
         <SectionCard
           className="lg:col-span-2"
@@ -209,165 +258,210 @@ function AlunoDashboard() {
             </Button>
           }
         >
-          {todaysClasses.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              Nenhuma aula programada para hoje.
-            </p>
+          {aulasHoje.length === 0 ? (
+            <EmptyState
+              title="Nenhuma aula agendada"
+              description="Quando houver aula ou personal marcado para hoje, ela aparecerá aqui."
+            />
           ) : (
             <ul className="divide-y divide-border">
-              {todaysClasses.map((c) => {
-                const modality = getModality(c.modalityId);
-                const professor = getProfessor(c.professorId);
-                const lotada = c.reserved >= c.capacity;
-                return (
-                  <li key={c.id} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-accent">
-                      <Dumbbell className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-foreground">{modality?.name}</span>
-                        <ModalityBadge id={c.modalityId} />
-                      </div>
-                      <div className="mt-0.5 text-xs text-muted-foreground">
-                        {c.time} · {professor?.name} · {c.reserved}/{c.capacity} vagas
-                      </div>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-2">
-                      {lotada ? (
-                        <StatusBadge tone="destructive">Lotada</StatusBadge>
-                      ) : (
-                        <StatusBadge tone="success">Aberta</StatusBadge>
-                      )}
-                      <Button size="sm" variant={lotada ? "outline" : "default"} disabled={lotada}>
-                        Reservar
-                      </Button>
-                    </div>
-                  </li>
-                );
-              })}
+              {aulasHoje.map((aula) => (
+                <ClassListItem key={`${aula.tipo}-${aula.aulaId}`} aula={aula} />
+              ))}
             </ul>
           )}
         </SectionCard>
 
         <SectionCard title="Evolução do peso">
-          <div className="mb-2 flex items-baseline justify-between">
-            <div className="font-display text-2xl text-foreground">{s.weightCurrent} kg</div>
-            <div className="text-xs text-success">-{weightLoss.toFixed(1)} kg / 90d</div>
-          </div>
-          <div className="h-40 w-full">
-            <ResponsiveContainer>
-              <AreaChart data={weightChart} margin={{ left: 0, right: 0, top: 5, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="peso" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="date" hide />
-                <YAxis hide domain={["dataMin - 1", "dataMax + 1"]} />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--color-card)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                  labelStyle={{ color: "var(--color-muted-foreground)" }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="peso"
-                  stroke="var(--color-primary)"
-                  strokeWidth={2}
-                  fill="url(#peso)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-            <span>Inicial {mockWeightHistory[0].weight} kg</span>
-            <span>Meta {s.weightGoal} kg</span>
-          </div>
+          {peso?.pesoAtual ? (
+            <div>
+              <div className="mb-2 flex items-baseline justify-between">
+                <div className="font-display text-2xl text-foreground">
+                  {formatNumber(peso.pesoAtual)} kg
+                </div>
+                <div className="text-xs text-success">
+                  {formatWeightDifference(peso.diferencaPeso)}
+                </div>
+              </div>
+              <div className="rounded-md bg-background/60 p-4 text-xs text-muted-foreground ring-1 ring-border">
+                Último registro em {formatDate(peso.dataPesoAtual) ?? "data não informada"}.
+                {peso.totalRegistros <= 1 ? " Ainda não há histórico suficiente para gráfico." : ""}
+              </div>
+              <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                <span>Menor {peso.menorPeso ? `${formatNumber(peso.menorPeso)} kg` : "—"}</span>
+                <span>Maior {peso.maiorPeso ? `${formatNumber(peso.maiorPeso)} kg` : "—"}</span>
+              </div>
+            </div>
+          ) : (
+            <EmptyState title="Peso ainda não informado" />
+          )}
         </SectionCard>
 
         <SectionCard className="lg:col-span-2" title="Próximas aulas">
-          <div className="grid gap-2 sm:grid-cols-2">
-            {upcoming.map((c) => {
-              const modality = getModality(c.modalityId);
-              const professor = getProfessor(c.professorId);
-              const d = new Date(c.date);
-              return (
-                <div
-                  key={c.id}
-                  className="flex items-center justify-between gap-3 rounded-md bg-background/60 p-3 ring-1 ring-border"
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-display text-sm uppercase tracking-wide text-foreground">
-                        {d.toLocaleDateString("pt-BR", {
-                          weekday: "short",
-                          day: "2-digit",
-                          month: "short",
-                        })}
-                      </span>
-                      <span className="text-xs text-muted-foreground">· {c.time}</span>
-                    </div>
-                    <div className="mt-1 flex items-center gap-2">
-                      <ModalityBadge id={c.modalityId} />
-                      <span className="truncate text-xs text-muted-foreground">
-                        {professor?.name}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                      {c.type === "personal" ? "Personal" : "Turma"}
-                    </div>
-                    <div className="font-display text-sm text-foreground">
-                      {c.reserved}/{c.capacity}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {proximasAulas.length === 0 ? (
+            <EmptyState
+              title="Nenhuma aula agendada"
+              description="Suas próximas aulas confirmadas aparecerão aqui."
+            />
+          ) : (
+            <div className="grid gap-2 sm:grid-cols-2">
+              {proximasAulas.map((aula) => (
+                <ClassCard key={`${aula.tipo}-${aula.aulaId}`} aula={aula} />
+              ))}
+            </div>
+          )}
         </SectionCard>
 
-        <SectionCard
-          title="Notificações"
-          action={
-            <Button size="sm" variant="ghost" asChild>
-              <Link to="/aluno/notificacoes">
-                Todas <ChevronRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          }
-        >
-          <ul className="space-y-3">
-            {unread.slice(0, 4).map((n) => (
-              <li key={n.id} className="flex gap-3">
-                <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-md bg-accent text-muted-foreground">
-                  <Bell className="h-4 w-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-foreground">{n.title}</div>
-                  <div className="line-clamp-2 text-xs text-muted-foreground">{n.message}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
+        <SectionCard title="Check-ins recentes">
+          {checkInsQuery.isLoading ? (
+            <LoadingState label="Carregando check-ins..." />
+          ) : checkInHistory.length === 0 ? (
+            <EmptyState title="Nenhum check-in registrado" />
+          ) : (
+            <ul className="space-y-3">
+              {checkInHistory.slice(0, 4).map((checkIn) => (
+                <li key={checkIn.id} className="flex gap-3">
+                  <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-md bg-accent text-muted-foreground">
+                    <CheckCircle2 className="h-4 w-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-medium text-foreground">
+                      Check-in registrado
+                    </div>
+                    <div className="line-clamp-2 text-xs text-muted-foreground">
+                      {formatDateTime(checkIn.realizadoEm)}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </SectionCard>
       </div>
     </>
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function ClassListItem({ aula }: { aula: StudentClassSummary }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="text-foreground">{value}</span>
+    <li className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-3">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-accent">
+        <Dumbbell className="h-4 w-4 text-muted-foreground" />
+      </div>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-foreground">{aula.modalidade ?? aula.tipo}</span>
+          <StudentTypeBadge tipo={aula.tipo} />
+        </div>
+        <div className="mt-0.5 text-xs text-muted-foreground">
+          {formatTimeRange(aula.horaInicio, aula.horaFim)} · {aula.professorNome}
+        </div>
+      </div>
+      <StatusBadge tone={aula.checkInRealizado ? "success" : "info"}>
+        {aula.checkInRealizado ? "Check-in feito" : aula.status}
+      </StatusBadge>
+    </li>
+  );
+}
+
+function ClassCard({ aula }: { aula: StudentClassSummary }) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-md bg-background/60 p-3 ring-1 ring-border">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="font-display text-sm uppercase tracking-wide text-foreground">
+            {formatShortDate(aula.data)}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            · {formatTimeRange(aula.horaInicio, aula.horaFim)}
+          </span>
+        </div>
+        <div className="mt-1 flex items-center gap-2">
+          <StudentTypeBadge tipo={aula.tipo} />
+          <span className="truncate text-xs text-muted-foreground">{aula.professorNome}</span>
+        </div>
+      </div>
+      <div className="text-right">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          {aula.tipo}
+        </div>
+        <div className="font-display text-sm text-foreground">{aula.status}</div>
+      </div>
     </div>
   );
+}
+
+function StudentTypeBadge({ tipo }: { tipo: string }) {
+  const label = tipo === "PERSONAL" ? "Personal" : tipo === "TURMA" ? "Turma" : tipo;
+
+  return (
+    <span className="inline-flex items-center rounded-md bg-info/12 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-info ring-1 ring-info/30">
+      {label}
+    </span>
+  );
+}
+
+function Row({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right text-foreground">{value}</span>
+    </div>
+  );
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(Number(value ?? 0));
+}
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+  }).format(Number(value));
+}
+
+function formatDate(value?: string | null) {
+  if (!value) return null;
+  return new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR");
+}
+
+function formatShortDate(value: string) {
+  return new Date(`${value}T12:00:00`).toLocaleDateString("pt-BR", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+  });
+}
+
+function formatDateTime(value: string) {
+  return new Date(value).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function formatTimeRange(start: string, end: string) {
+  return `${start.slice(0, 5)}-${end.slice(0, 5)}`;
+}
+
+function formatWeightDifference(value?: number | null) {
+  if (value === null || value === undefined) return "Sem variação registrada";
+  if (value === 0) return "Peso estável";
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${formatNumber(value)} kg`;
+}
+
+function formatFinancialStatus(status?: string, emDia?: boolean) {
+  if (!status || status === "SEM_FATURA") return "Sem fatura";
+  if (emDia) return "Em dia";
+  if (status === "VENCIDA") return "Vencida";
+  if (status === "PENDENTE") return "Pendente";
+  return status.replaceAll("_", " ");
 }

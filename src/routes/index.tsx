@@ -1,5 +1,6 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
-import { getSession, homePathFor } from "@/lib/auth";
+import { AuthState } from "@/components/auth/AuthState";
+import { useAuth } from "@/lib/auth/context";
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -7,7 +8,18 @@ export const Route = createFileRoute("/")({
 });
 
 function IndexRedirect() {
-  const session = getSession();
-  if (!session) return <Navigate to="/login" />;
-  return <Navigate to={homePathFor(session.user.role)} />;
+  const auth = useAuth();
+
+  if (auth.authLoading || auth.backendSessionLoading) {
+    return (
+      <AuthState
+        title="Carregando sessão"
+        description="Estamos confirmando seu acesso com segurança."
+      />
+    );
+  }
+
+  if (!auth.firebaseUser && !auth.isDemoSession) return <Navigate to="/login" />;
+  if (auth.homePath) return <Navigate to={auth.homePath} />;
+  return <Navigate to="/login" />;
 }

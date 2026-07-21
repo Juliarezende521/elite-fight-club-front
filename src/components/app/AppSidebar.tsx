@@ -30,7 +30,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { signOut } from "@/lib/auth";
+import { useAuth } from "@/lib/auth/context";
 
 type NavItem = { title: string; url: string; icon: React.ComponentType<{ className?: string }> };
 
@@ -102,6 +102,7 @@ const NAV: Record<Role, { label: string; items: NavItem[] }[]> = {
 };
 
 export function AppSidebar({ role }: { role: Role }) {
+  const auth = useAuth();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const groups = NAV[role];
 
@@ -153,8 +154,8 @@ export function AppSidebar({ role }: { role: Role }) {
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Sair"
-              onClick={() => {
-                void signOut();
+              onClick={async () => {
+                await auth.logout();
                 window.location.href = "/login";
               }}
             >

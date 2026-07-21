@@ -4,7 +4,10 @@ import { Swords, ShieldCheck, GraduationCap, User as UserIcon } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn, homePathFor } from "@/lib/auth";
+import { useAuth } from "@/lib/auth/context";
+import { appEnv } from "@/lib/env";
+import { mapLoginError } from "@/lib/auth/service";
+import { roleHomePath } from "@/lib/auth/session";
 import type { Role } from "@/types";
 import { toast } from "sonner";
 
@@ -37,22 +40,39 @@ const ROLES: {
 
 function LoginPage() {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [role, setRole] = useState<Role>("ALUNO");
-  const [email, setEmail] = useState("rafael@elitefc.com");
-  const [password, setPassword] = useState("••••••••");
+  const [email, setEmail] = useState(appEnv.enableDemoMode ? "rafael@elitefc.com" : "");
+  const [password, setPassword] = useState(appEnv.enableDemoMode ? "••••••••" : "");
+  const [loading, setLoading] = useState(false);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email || !password) {
       toast.error("Preencha email e senha.");
       return;
     }
+
+    setLoading(true);
     try {
-      const s = signIn(role);
-      toast.success(`Bem-vindo, ${s.user.name.split(" ")[0]}!`);
-      navigate({ to: homePathFor(role) });
+      if (appEnv.enableDemoMode) {
+        await auth.loginDemo(role);
+        toast.success("Modo demonstração iniciado.");
+        navigate({ to: roleHomePath(role) });
+        return;
+      }
+
+      const user = await auth.loginWithFirebase(email, password);
+      toast.success(`Bem-vindo, ${user.nome.split(" ")[0]}!`);
+      navigate({ to: roleHomePath(user.perfil) });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível entrar.");
+      toast.error(
+        appEnv.enableDemoMode
+          ? "Não foi possível iniciar o modo demonstração."
+          : mapLoginError(error),
+      );
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -109,36 +129,43 @@ function LoginPage() {
           <div className="mb-6">
             <h1 className="heading-hero text-2xl text-foreground">Entrar</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              Escolha seu perfil de acesso para continuar.
+              {appEnv.enableDemoMode
+                ? "Escolha seu perfil de acesso para continuar."
+                : "Acesse com seu e-mail e senha cadastrados."}
             </p>
           </div>
 
-          <div className="mb-5 grid grid-cols-3 gap-2">
-            {ROLES.map((r) => {
-              const active = r.role === role;
-              return (
-                <button
-                  key={r.role}
-                  type="button"
-                  onClick={() => setRole(r.role)}
-                  className={
-                    "flex flex-col items-start gap-1 rounded-md p-3 text-left ring-1 transition-colors " +
-                    (active
-                      ? "bg-primary/10 ring-primary/50"
-                      : "bg-background/40 ring-border hover:bg-accent")
-                  }
-                >
-                  <r.icon
-                    className={"h-4 w-4 " + (active ? "text-primary" : "text-muted-foreground")}
-                  />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
-                    {r.label}
-                  </span>
-                  <span className="text-[10px] leading-tight text-muted-foreground">{r.desc}</span>
-                </button>
-              );
-            })}
-          </div>
+          {appEnv.enableDemoMode && (
+            <div className="mb-5 grid grid-cols-3 gap-2">
+              {ROLES.map((r) => {
+                const active = r.role === role;
+                return (
+                  <button
+                    key={r.role}
+                    type="button"
+                    disabled={loading}
+                    onClick={() => setRole(r.role)}
+                    className={
+                      "flex flex-col items-start gap-1 rounded-md p-3 text-left ring-1 transition-colors " +
+                      (active
+                        ? "bg-primary/10 ring-primary/50"
+                        : "bg-background/40 ring-border hover:bg-accent")
+                    }
+                  >
+                    <r.icon
+                      className={"h-4 w-4 " + (active ? "text-primary" : "text-muted-foreground")}
+                    />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground">
+                      {r.label}
+                    </span>
+                    <span className="text-[10px] leading-tight text-muted-foreground">
+                      {r.desc}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
@@ -150,6 +177,7 @@ function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 bg-background"
                 autoComplete="email"
+                disabled={loading}
               />
             </div>
             <div>
@@ -169,15 +197,22 @@ function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 bg-background"
                 autoComplete="current-password"
+                disabled={loading}
               />
             </div>
 
-            <Button type="submit" className="w-full" size="lg">
-              Entrar como {ROLES.find((r) => r.role === role)?.label}
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+              {loading
+                ? "Entrando..."
+                : appEnv.enableDemoMode
+                  ? `Entrar como ${ROLES.find((r) => r.role === role)?.label}`
+                  : "Entrar"}
             </Button>
 
             <p className="text-center text-[11px] text-muted-foreground">
-              Autenticação real via Firebase + Spring Boot será conectada em seguida.
+              {appEnv.enableDemoMode
+                ? "Modo demonstração ativo para desenvolvimento."
+                : "Autenticação real via Firebase + Spring Boot."}
             </p>
           </form>
         </div>
