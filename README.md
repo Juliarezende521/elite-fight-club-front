@@ -1,258 +1,141 @@
-# 🥋 Elite Fight Club — Frontend
+# Elite Fight Club — Frontend
 
-Interface web moderna, responsiva e premium para o **Elite Fight Club**, sistema de gestão de academias de artes marciais e lutas.
+[![Frontend CI](https://github.com/Juliarezende521/elite-fight-club-front/actions/workflows/ci.yml/badge.svg)](https://github.com/Juliarezende521/elite-fight-club-front/actions/workflows/ci.yml)
 
-Este repositório é o **frontend oficial aprovado no Lovable**. O visual deve ser preservado durante a integração gradual com o backend Spring Boot.
+Interface web do **Elite Fight Club**, um projeto pessoal de gestão para academias de artes marciais. A aplicação oferece experiências diferentes para alunos, professores e administradores e está sendo integrada gradualmente ao backend em Java e Spring Boot.
 
-Construída com **TanStack Start**, **React 19**, **Tailwind CSS v4** e **shadcn/ui**, a aplicação entrega uma experiência inspirada em dashboards esportivos de alto padrão, com identidade visual escura, tipografia marcante e navegação fluida entre os perfis de **Aluno**, **Professor** e **Administrador**.
+> Projeto pessoal em desenvolvimento, independente dos trabalhos acadêmicos realizados em grupo.
 
----
+## Status
 
-## ✨ Funcionalidades
+- Interface responsiva implementada para os três perfis.
+- Autenticação Firebase e sessão validada pelo backend.
+- Cliente HTTP centralizado e proteção de rotas por perfil.
+- Integração real já iniciada em módulos administrativos e do aluno.
+- Algumas telas ainda utilizam dados simulados e estão identificadas no plano de migração.
+- Lint, TypeScript e build validados automaticamente pelo GitHub Actions.
+- Deploy público ainda não realizado.
 
-### Perfis e módulos
+## Funcionalidades da interface
 
-- **👤 Aluno**
-  - Dashboard pessoal com evolução de treinos, frequência e próximas aulas
-  - Grade semanal de aulas por modalidade
-  - Mapa de calor de frequência (90 dias)
-  - Acompanhamento de evolução física e graduação
-  - Histórico financeiro e métodos de pagamento
-  - Central de notificações
+### Aluno
 
-- **🎓 Professor**
-  - Agenda do dia e próximas turmas
-  - Lista de alunos com filtros e status
-  - Controle de check-in / presença por aula
+- Dashboard pessoal.
+- Grade de aulas.
+- Frequência e evolução física.
+- Graduação.
+- Histórico financeiro.
+- Central de notificações.
 
-- **⚙️ Administrador**
-  - Dashboard financeiro com receitas, inadimplência e métricas
-  - Gestão de modalidades
-  - Relatórios e configurações do sistema
+### Professor
 
-### Destaques técnicos
+- Agenda de aulas.
+- Consulta de alunos.
+- Check-in e controle de presença.
+- Estrutura preparada para turmas, aulas particulares e graduações.
 
-- 🎨 Tema dark premium com tokens semânticos OKLCH
-- 📱 Layout totalmente responsivo (desktop, tablet e mobile)
-- 📊 Gráficos interativos com Recharts
-- 🔐 Login real com Firebase Auth e sessão validada no Spring Boot
-- 🧭 Redirecionamento e proteção de rotas por perfil retornado pelo backend
-- 🚀 Cliente Axios integrado ao backend com Bearer Token
-- ♿ Componentes acessíveis com Radix UI
+### Administrador
 
----
+- Dashboard financeiro.
+- Gestão de alunos e modalidades.
+- Estrutura preparada para professores, auditoria, relatórios e configurações.
 
-## 🛠️ Stack tecnológica
+## Tecnologias
 
-| Tecnologia        | Versão | Uso                                    |
-| ----------------- | ------ | -------------------------------------- |
-| TanStack Start    | v1     | Framework full-stack React com SSR/SSG |
-| React             | 19     | Biblioteca de UI                       |
-| TypeScript        | 5.x    | Tipagem estática                       |
-| Tailwind CSS      | 4.x    | Estilização utilitária                 |
-| shadcn/ui + Radix | —      | Componentes de interface               |
-| TanStack Query    | 5.x    | Gerenciamento de dados                 |
-| Recharts          | 2.x    | Visualização de dados                  |
-| Axios             | 1.x    | Cliente HTTP para API                  |
-| Firebase          | 12.x   | Autenticação client-side               |
-| date-fns          | 4.x    | Manipulação de datas                   |
-| Lucide React      | —      | Ícones                                 |
+| Tecnologia | Uso |
+| --- | --- |
+| TanStack Start | Aplicação React com SSR |
+| React 19 | Interface |
+| TypeScript | Tipagem estática |
+| Tailwind CSS 4 | Estilização |
+| shadcn/ui e Radix UI | Componentes acessíveis |
+| TanStack Query | Estado assíncrono |
+| Recharts | Visualização de dados |
+| Axios | Comunicação com a API |
+| Firebase | Autenticação |
+| Bun | Dependências e scripts |
 
----
+## Identidade visual
 
-## 🚀 Como rodar localmente
+A primeira direção visual foi prototipada com apoio do **Lovable**. A partir dela, o código está sendo revisado, integrado ao backend Spring Boot e evoluído como parte do projeto pessoal.
 
-### Pré-requisitos
+- Tema escuro inspirado em dashboards esportivos.
+- Tipografia Oswald e Inter.
+- Tokens semânticos em OKLCH.
+- Layout responsivo para desktop, tablet e celular.
+- Componentes baseados em Radix UI.
 
-- [Node.js](https://nodejs.org/) 18+ (recomendado 20+)
-- [Bun](https://bun.sh/) ou npm/yarn/pnpm
+## Como executar
 
-### Passo a passo
+Pré-requisitos:
+
+- Bun
+- Backend Elite Fight Club em execução para os fluxos reais
+- Projeto Firebase para autenticação real
 
 ```bash
-# 1. Clone o repositório
 git clone https://github.com/Juliarezende521/elite-fight-club-front.git
 cd elite-fight-club-front
-
-# 2. Instale as dependências
 bun install
-# ou: npm install
-
-# 3. Inicie o servidor de desenvolvimento
+cp .env.example .env.local
 bun dev
-# ou: npm run dev
 ```
 
-A porta local é definida pelo Vite/TanStack Start. Normalmente o app roda em `http://localhost:5173`.
+No Windows, copie manualmente `.env.example` para `.env.local` caso não use um terminal compatível com `cp`.
 
-## ⚙️ Variáveis de ambiente
-
-Crie um `.env.local` local com base no `.env.example`.
+## Variáveis de ambiente
 
 ```env
 VITE_API_BASE_URL=http://localhost:8080
 VITE_ENABLE_DEMO_MODE=false
-
 VITE_FIREBASE_API_KEY=
 VITE_FIREBASE_AUTH_DOMAIN=
 VITE_FIREBASE_PROJECT_ID=
 VITE_FIREBASE_APP_ID=
 ```
 
-Nunca versionar `.env`, `.env.local` ou credenciais reais.
+O modo demonstração permite navegar pela interface sem representar autenticação real. Em um ambiente integrado, mantenha `VITE_ENABLE_DEMO_MODE=false`.
 
----
+## Autenticação e autorização
 
-## 🔐 Login e perfis
+No fluxo real:
 
-A tela de login preserva o fluxo visual aprovado. A escolha livre de perfil é apenas modo demonstração e deve ficar habilitada somente com:
+1. O Firebase autentica o usuário.
+2. O frontend obtém o Firebase ID Token.
+3. O token é enviado ao backend no cabeçalho `Authorization`.
+4. O endpoint `GET /auth/me` retorna o perfil e a academia.
+5. O frontend libera somente as rotas compatíveis com o perfil retornado.
 
-```env
-VITE_ENABLE_DEMO_MODE=true
+A permissão definitiva é validada pelo backend; o frontend não é usado como fonte de autorização.
+
+## Qualidade
+
+```bash
+bun run lint
+bun run typecheck
+bun run build
 ```
 
-| Perfil        | Acesso principal       |
-| ------------- | ---------------------- |
-| Aluno         | `/aluno/dashboard`     |
-| Professor     | `/professor/dashboard` |
-| Administrador | `/admin/dashboard`     |
+O workflow `Frontend CI` executa essas verificações automaticamente em cada push e pull request para a branch principal.
 
-No fluxo real, o usuário entra pelo Firebase Auth, o frontend obtém o Firebase ID Token e o envia ao Spring Boot em:
-
-```http
-Authorization: Bearer <firebase_id_token>
-```
-
-Depois disso, o frontend chama:
-
-```http
-GET /auth/me
-```
-
-Resposta esperada:
-
-```json
-{
-  "id": 10,
-  "nome": "Rafael Moreira",
-  "email": "rafael@elitefc.com",
-  "perfil": "ALUNO",
-  "ativo": true,
-  "academia": {
-    "id": 1,
-    "nome": "Elite Fight Club",
-    "status": "ATIVA"
-  },
-  "alunoId": 20,
-  "professorId": null
-}
-```
-
-O perfil definitivo vem do backend. O frontend não usa `localStorage`, rota ou query string como fonte de permissão.
-
-Estados tratados:
-
-- login Firebase sem cadastro no backend;
-- usuário sem academia;
-- usuário inativo, quando informado pelo backend;
-- acesso negado;
-- backend indisponível;
-- sessão expirada.
-
----
-
-## 📁 Estrutura de pastas
-
-```text
-src/
-├── components/          # Componentes reutilizáveis
-│   ├── app/             # Componentes de aplicação (sidebar, header, cards)
-│   └── ui/              # Componentes shadcn/ui
-├── lib/                 # Utilitários, autenticação, Firebase, API e query keys
-├── mocks/               # Dados mockados para desenvolvimento
-├── routes/              # Rotas do TanStack Router
-│   ├── aluno.*.tsx      # Área do aluno
-│   ├── professor.*.tsx  # Área do professor
-│   ├── admin.*.tsx      # Área do administrador
-│   └── api/             # Endpoints serverless
-├── types/               # Tipagens TypeScript
-├── styles.css           # Tema global e tokens de design
-└── router.tsx           # Configuração do roteador
-```
-
----
-
-## 🔌 Integração com backend
-
-O projeto possui uma instância centralizada do Axios em `src/lib/api.ts` com:
-
-- `baseURL` por `VITE_API_BASE_URL`;
-- timeout;
-- `Content-Type: application/json`;
-- envio automático do Bearer token Firebase quando disponível;
-- normalização de erros em `ApiError`.
-
-```env
-VITE_API_BASE_URL=http://localhost:8080
-```
-
-Documentação complementar:
+## Documentação da integração
 
 - `docs/FRONTEND_INTEGRATION_PLAN.md`
 - `docs/API_INTEGRATION_MAP.md`
 - `docs/MOCK_MIGRATION_PLAN.md`
 
----
+Backend do projeto:
 
-## 🧪 Scripts disponíveis
+[elite-fight-club-backend-atual](https://github.com/Juliarezende521/elite-fight-club-backend-atual)
 
-```bash
-bun dev          # Inicia o servidor de desenvolvimento
-bun build        # Gera a build de produção
-bun build:dev    # Gera a build em modo desenvolvimento
-bun preview      # Previsualiza a build de produção
-bun lint         # Executa o ESLint
-bun typecheck    # Checa TypeScript
-bun format       # Formata o código com Prettier
-```
+## Processo de desenvolvimento
 
-Se estiver usando npm:
+Ferramentas de inteligência artificial são utilizadas como apoio para prototipação, pesquisa, revisão e implementação. A integração, as decisões técnicas, a validação das regras e os testes são acompanhados e revisados durante o desenvolvimento.
 
-```bash
-npm run lint
-npm run typecheck
-npm run build
-```
+## Próximas etapas
 
----
-
-## 🎨 Identidade visual
-
-- **Tema**: Dark premium
-- **Fonte de títulos**: Oswald
-- **Fonte de corpo**: Inter
-- **Cor primária**: Azul esportivo (#3B82F6)
-- **Superfície de fundo**: Slate escuro (#0F172A)
-- **Estilo**: Dashboards esportivos premium, com alto contraste e hierarquia visual clara
-
----
-
-## 🤝 Contribuição
-
-1. Faça um fork do repositório
-2. Crie uma branch: `git checkout -b minha-feature`
-3. Faça commit das alterações: `git commit -m 'feat: adiciona nova funcionalidade'`
-4. Envie para o GitHub: `git push origin minha-feature`
-5. Abra um Pull Request
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-<p align="center">
-  Feito com 💪 para a comunidade de lutas
-</p>
+- Substituir os mocks restantes por chamadas reais.
+- Completar os fluxos de professor e administrador.
+- Adicionar testes automatizados de componentes e navegação.
+- Registrar capturas de tela e uma demonstração do produto.
+- Preparar um ambiente gratuito de demonstração, se houver uma opção adequada.
