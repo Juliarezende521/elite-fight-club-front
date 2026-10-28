@@ -126,7 +126,7 @@ O workflow `Frontend CI` executa essas verificações automaticamente em cada pu
 
 Backend do projeto:
 
-[elite-fight-club-backend-atual](https://github.com/Juliarezende521/elite-fight-club-backend-atual)
+[elite-fight-club-backend](https://github.com/Juliarezende521/elite-fight-club-backend)
 
 ## Processo de desenvolvimento
 
