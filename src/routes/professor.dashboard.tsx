@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DemoOnlyContent } from "@/components/auth/DemoOnlyContent";
 import { PageHeader } from "@/components/app/PageHeader";
 import { StatCard } from "@/components/app/StatCard";
 import { SectionCard } from "@/components/app/SectionCard";
@@ -9,7 +10,11 @@ import { Button } from "@/components/ui/button";
 import { mockClasses, getProfessor, getModality } from "@/mocks";
 
 export const Route = createFileRoute("/professor/dashboard")({
-  component: ProfessorDashboard,
+  component: () => (
+    <DemoOnlyContent>
+      <ProfessorDashboard />
+    </DemoOnlyContent>
+  ),
 });
 
 function ProfessorDashboard() {

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DemoOnlyContent } from "@/components/auth/DemoOnlyContent";
 import { PageHeader } from "@/components/app/PageHeader";
 import { SectionCard } from "@/components/app/SectionCard";
 import { EmptyState } from "@/components/app/EmptyState";
@@ -15,7 +16,11 @@ import {
 } from "recharts";
 
 export const Route = createFileRoute("/aluno/evolucao")({
-  component: Evolucao,
+  component: () => (
+    <DemoOnlyContent>
+      <Evolucao />
+    </DemoOnlyContent>
+  ),
 });
 
 function Evolucao() {

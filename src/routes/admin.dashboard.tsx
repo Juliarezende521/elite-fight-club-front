@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DemoOnlyContent } from "@/components/auth/DemoOnlyContent";
 import {
   Users,
   UserCheck,
@@ -45,7 +46,11 @@ export const Route = createFileRoute("/admin/dashboard")({
       { name: "description", content: "Visão geral de alunos, receita e operação." },
     ],
   }),
-  component: AdminDashboard,
+  component: () => (
+    <DemoOnlyContent>
+      <AdminDashboard />
+    </DemoOnlyContent>
+  ),
 });
 
 const currency = (n: number) =>
