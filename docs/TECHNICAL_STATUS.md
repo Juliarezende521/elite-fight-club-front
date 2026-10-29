@@ -1,5 +1,46 @@
 # Auditoria tecnica de integracao
 
+## Estabilizacao posterior sobre main atualizada
+
+Data: 2026-10-29. Este documento foi trazido por cherry-pick de
+ee54721ff73ee15a44368cc7a288524778a6550b para a branch
+codex/stabilize-auth-identity, criada de origin/main
+1f1f709ed1a321bf184837d17147251b45c7ec21.
+O backend foi trabalhado separadamente em codex/stabilize-professor-security,
+base origin/main 7b3fe4078dda74ca2a902b433be809884a92d934.
+As pastas originais e o trabalho pendente de professores foram preservados.
+
+Os achados abaixo sao a fotografia historica da auditoria, nao o estado final das
+correcoes desta etapa. Nesta base atualizada:
+
+- /auth/me usa chave por UID (ou identidade demo explicita), sem staleTime positivo.
+- Troca de identidade cancela consultas e limpa cache; respostas atrasadas sao
+  invalidadas. Mudanca de perfil/academia no mesmo UID limpa consultas privadas.
+- Logout oculta o perfil antes da operacao remota e remove dados privados.
+- Demo exige VITE_ENABLE_DEMO_MODE=true. Sessao/token residual e ignorado com false.
+- Evolucao e os tres paineis ainda mockados (dashboard admin, dashboard professor
+  e alunos do professor) so renderizam mocks em sessao demo explicita. No modo real,
+  exibem estado de integracao pendente. Nenhuma evolucao fisica foi implementada.
+- Na main atual, student-dashboard.ts ja separa demo explicito e API real.
+- O backend restringe CRUD /professores a ADMIN, usa DTOs e Bean Validation,
+  e filtra academia. /api/professores continua ausente; contrato moderno pendente.
+- Vitest, React Testing Library e jsdom foram adicionados com Bun, preservando
+  bun.lock; o workflow inclui testes sem remover lint, tipos ou build.
+
+Validacao: 19 testes frontend; backend com 340 testes (9 novos), sem falhas.
+Lint frontend: 0 erros e 6 avisos preexistentes de Fast Refresh; typecheck/build
+aprovados. Maven test/clean package aprovados. Ambiente de teste backend usa H2,
+nao comprova migrations em PostgreSQL nem Firebase real. Nao houve merge,
+alteracao de banco ou integracao completa de professores.
+
+Worktrees: /Users/julia/Documents/Elite/stabilize-frontend e
+/Users/julia/Documents/Elite/stabilize-backend.
+
+Proxima etapa: integrar peso real pelas APIs existentes, apos revisar estas
+branches e decidir como incorporar o trabalho local pendente de professores.
+
+## Fotografia original da auditoria
+
 Data: 2026-10-29. Fonte: codigo local e referencias remotas obtidas com git fetch.
 Capturas do README sao prototipos com dados ficticios, nao evidencia de integracao.
 
@@ -9,12 +50,12 @@ Capturas do README sao prototipos com dados ficticios, nao evidencia de integrac
 | --- | --- | --- |
 | Frontend oficial | /Users/julia/Documents/elite-fight-club-front | HEAD 78e58737dc65ccc004d69fc9dabcdd8e79ce9567 e alteracoes locais de professores |
 | Frontend remoto | Juliarezende521/elite-fight-club-front | origin/main 1f1f709ed1a321bf184837d17147251b45c7ec21 |
-| Backend | /Users/julia/Documents/elite-fight-club-backend-atual | branch codex/remove-legacy-financeiro-code, commit 1369fa7184263bb1747e64fdbfb319650360c0d2 |
+| Backend local | Clone existente de Juliarezende521/elite-fight-club-backend | branch codex/remove-legacy-financeiro-code, commit 1369fa7184263bb1747e64fdbfb319650360c0d2 |
 | Backend remoto renomeado | Juliarezende521/elite-fight-club-backend | origin/main 7b3fe4078dda74ca2a902b433be809884a92d934 |
 
 O origin do backend foi atualizado localmente para o repositorio renomeado.
-Nao houve renomeacao fisica das pastas. A pasta elite-fight-club-frontend contem outro
-projeto Next.js com diversas alteracoes locais; nao e o frontend oficial auditado.
+Nao houve renomeacao fisica das pastas. Outro projeto Next.js local contem diversas
+alteracoes locais; nao e o frontend oficial auditado.
 
 O frontend local estava 16 commits atras da main, com queryKeys.ts e
 admin.professores.tsx modificados e lib/professores.ts novo. Esses arquivos foram
