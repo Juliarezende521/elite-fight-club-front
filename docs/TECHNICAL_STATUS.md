@@ -1,5 +1,56 @@
 # Auditoria tecnica de integracao
 
+## Evolucao de peso do aluno: primeira integracao
+
+Data: 2026-10-29. Branch codex/student-weight-evolution, worktree
+/Users/julia/Documents/Elite/evolution-frontend, criada da main estabilizada
+553a78398f322b6fa2e7429ba96e213a77186d8a. Os registros abaixo de estabilizacao e
+auditoria sao fotografias historicas; esta secao descreve a entrega mais recente.
+
+Somente a aba Peso de /aluno/evolucao foi integrada. O cliente tipado
+src/lib/student-evolution.ts usa o HTTP central com Firebase Bearer:
+
+- GET /api/alunos/me/pesos: historico.
+- GET /api/alunos/me/pesos/resumo: indicadores calculados pelo backend.
+- POST /api/alunos/me/pesos: cadastro.
+- PUT /api/alunos/me/pesos/{registroId}: edicao com payload completo.
+- DELETE /api/alunos/me/pesos/{registroId}: exclusao apos confirmacao.
+
+Resumo, grafico e historico usam exclusivamente respostas reais em sessao real.
+As queries incluem UID, academia e aluno; a troca desse contexto remonta o componente.
+Mutations invalidam historico, resumo e dashboard. Nao existem atualizacoes
+otimistas que apresentem dados como persistidos antes da confirmacao da API.
+
+O formulario valida peso de 0,01 a 500 kg, data civil valida nao futura e observacao
+de ate 1.000 caracteres. Aceita virgula decimal e envia JSON numerico. O backend
+normaliza duas casas decimais com HALF_UP. A restricao de 1.000 caracteres foi
+confirmada na entidade, embora os DTOs existentes nao tenham @Size nesse campo.
+Nenhuma incompatibilidade impeditiva de contrato foi encontrada.
+
+dataRegistro e mantida como YYYY-MM-DD; exibicao usa meio-dia local, sem converter
+a data civil em UTC. O grafico ordena pela data completa e mostra ponto visivel
+mesmo com um unico registro. Diferenca e demais indicadores vem do resumo da API.
+Falhas de qualquer consulta mostram erro com retry, nunca historico vazio ou zero.
+Mensagens 400/401/403/404/409 e indisponibilidade sao tratadas sem expor erros internos.
+Cadastro/edicao bloqueiam envio repetido; exclusao exige confirmacao e mostra progresso.
+
+Demo exige flag explicita e sessao demo. Preserva a apresentacao ficticia anterior,
+com grafico compartilhado; sessao real nunca usa fallback para mocks.
+Meta de peso, medidas, avaliacoes e bioimpedancia continuam em desenvolvimento
+na sessao real. Nenhuma funcionalidade de professor/admin foi integrada.
+
+Testes adicionados em src/lib/student-evolution.test.ts e
+src/components/student/WeightEvolution.test.tsx: endpoints/Bearer, erro, vazio,
+resumo, ordenacao entre anos, um registro, cadastro, validacao, edicao, exclusao,
+confirmacao/cancelamento, progresso, invalidacao de queries, isolamento de cache
+e demo/real. Todos usam dados sinteticos, sem Firebase ou servidor externo.
+
+Validacoes: Bun com lockfile congelado, 63 testes aprovados (19 existentes e 44
+novos), lint sem erros (6 avisos preexistentes), typecheck, build e diff --check.
+Validacao autenticada ao vivo com Firebase/PostgreSQL continua pendente. Testes
+do backend nao foram repetidos porque nenhum arquivo backend foi alterado.
+Nao houve nova migration, dependencia, package-lock.json ou alteracao dos prints.
+
 ## Estabilizacao posterior sobre main atualizada
 
 Data: 2026-10-29. Este documento foi trazido por cherry-pick de
