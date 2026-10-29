@@ -174,5 +174,5 @@ Ferramentas de inteligência artificial são utilizadas como apoio para prototip
 - Substituir os mocks restantes por chamadas reais.
 - Completar os fluxos de professor e administrador.
 - Adicionar testes automatizados de componentes e navegação.
-- Registrar capturas de tela e uma demonstração do produto.
+- Registrar uma demonstração em vídeo do produto.
 - Preparar um ambiente gratuito de demonstração, se houver uma opção adequada.
