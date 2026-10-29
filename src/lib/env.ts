@@ -6,9 +6,7 @@ function envValue(key: keyof ImportMetaEnv): string {
 
 export const appEnv = {
   apiBaseUrl: envValue("VITE_API_BASE_URL") || "http://localhost:8080",
-  enableDemoMode:
-    envValue("VITE_ENABLE_DEMO_MODE") === "true" ||
-    (env.DEV && envValue("VITE_ENABLE_DEMO_MODE") !== "false"),
+  enableDemoMode: envValue("VITE_ENABLE_DEMO_MODE") === "true",
   firebase: {
     apiKey: envValue("VITE_FIREBASE_API_KEY"),
     authDomain: envValue("VITE_FIREBASE_AUTH_DOMAIN"),

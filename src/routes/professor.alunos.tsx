@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DemoOnlyContent } from "@/components/auth/DemoOnlyContent";
 import { PageHeader } from "@/components/app/PageHeader";
 import { SectionCard } from "@/components/app/SectionCard";
 import { StatusBadge } from "@/components/app/StatusBadge";
@@ -9,7 +10,11 @@ import { Search, Plus } from "lucide-react";
 import { mockStudents, getPrajied } from "@/mocks";
 
 export const Route = createFileRoute("/professor/alunos")({
-  component: AlunosPage,
+  component: () => (
+    <DemoOnlyContent>
+      <AlunosPage />
+    </DemoOnlyContent>
+  ),
 });
 
 function AlunosPage() {

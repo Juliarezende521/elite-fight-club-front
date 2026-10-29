@@ -7,6 +7,7 @@ import {
 } from "firebase/auth";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { http } from "@/lib/api";
+import { appEnv } from "@/lib/env";
 import type { Role } from "@/types";
 import type { BackendAuthenticatedUser } from "@/lib/auth/session";
 
@@ -24,7 +25,7 @@ export interface DemoSession {
 }
 
 export function getDemoSession(): DemoSession | null {
-  if (typeof window === "undefined") return null;
+  if (!appEnv.enableDemoMode || typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(DEMO_KEY);
     return raw ? (JSON.parse(raw) as DemoSession) : null;
@@ -82,6 +83,7 @@ export async function fetchAuthenticatedUser() {
 }
 
 export async function signOutEverywhere() {
+  clearDemoSession();
   const auth = getFirebaseAuth();
   if (auth?.currentUser) {
     await firebaseSignOut(auth);
