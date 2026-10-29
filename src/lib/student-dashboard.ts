@@ -186,27 +186,96 @@ function isDemo() {
 function demoDashboard(): StudentDashboardResponse {
   const today = formatLocalDate(new Date());
   const aula = (id: number, h: string, f: string, mod: string): StudentClassSummary => ({
-    aulaId: id, tipo: "TURMA", data: today, horaInicio: h, horaFim: f, status: "AGENDADA",
-    modalidade: mod, professorNome: "Mestre Carlos", reservada: true, checkInRealizado: false,
-    statusPresenca: null, sessaoCheckInAberta: false,
+    aulaId: id,
+    tipo: "TURMA",
+    data: today,
+    horaInicio: h,
+    horaFim: f,
+    status: "AGENDADA",
+    modalidade: mod,
+    professorNome: "Mestre Carlos",
+    reservada: true,
+    checkInRealizado: false,
+    statusPresenca: null,
+    sessaoCheckInAberta: false,
   });
   const aulas = [aula(1, "18:00", "19:00", "Muay Thai"), aula(2, "19:30", "20:30", "Jiu-Jitsu")];
   return {
-    alunoId: 1, nome: "Rafael Moreira", ativo: true,
-    prajied: { prajiedId: 2, nome: "Prajied Vermelho", corHex: "#dc2626", ordem: 2, checkInsAtuais: 38,
-      checkInsNecessariosProximaGraduacao: 50, checkInsFaltantes: 12, proximoPrajiedId: 3,
-      proximoPrajiedNome: "Prajied Azul", percentualProgresso: 76, elegivelParaAvaliacao: false,
-      tempoMinimoMeses: 6, motivo: null },
-    checkIns: { total: 124, noMesAtual: 11, naSemanaAtual: 3, ultimoCheckInEm: new Date().toISOString() },
-    plano: { planoId: 1, nome: "Plano Pro", tipo: "TURMA", aulasPorSemana: 5, valor: 249.9, ativo: true,
-      reservasConfirmadasNaSemana: 3, aulasRestantesNaSemana: 2 },
-    financeiro: { emDia: true, faturaAtualId: 1, mesReferencia: today.slice(0, 7), vencimento: today,
-      valorTotal: 249.9, valorPago: 249.9, saldo: 0, status: "PAGA", possuiPixPendente: false,
-      pagamentoPixId: null, pixExpiraEm: null },
-    preferenciaPagamento: { formaPreferida: "PIX", statusAutorizacao: null, pagamentoAutomaticoAtivo: false, descricaoMascarada: null },
-    evolucaoPeso: { pesoAtual: 78.4, dataPesoAtual: today, diferencaPeso: -3.2, menorPeso: 78.4, maiorPeso: 82.1, totalRegistros: 8 },
-    metaPeso: { metaId: 1, pesoAtual: 78.4, pesoAlvo: 75, quantidadeRestante: 3.4, percentualProgresso: 48, direcao: "PERDER", metaAtingida: false, status: "EM_ANDAMENTO" },
-    proximaAula: aulas[0], aulasHoje: aulas, aulasSemana: aulas, horariosFixosPersonal: [],
+    alunoId: 1,
+    nome: "Rafael Moreira",
+    ativo: true,
+    prajied: {
+      prajiedId: 2,
+      nome: "Prajied Vermelho",
+      corHex: "#dc2626",
+      ordem: 2,
+      checkInsAtuais: 38,
+      checkInsNecessariosProximaGraduacao: 50,
+      checkInsFaltantes: 12,
+      proximoPrajiedId: 3,
+      proximoPrajiedNome: "Prajied Azul",
+      percentualProgresso: 76,
+      elegivelParaAvaliacao: false,
+      tempoMinimoMeses: 6,
+      motivo: null,
+    },
+    checkIns: {
+      total: 124,
+      noMesAtual: 11,
+      naSemanaAtual: 3,
+      ultimoCheckInEm: new Date().toISOString(),
+    },
+    plano: {
+      planoId: 1,
+      nome: "Plano Pro",
+      tipo: "TURMA",
+      aulasPorSemana: 5,
+      valor: 249.9,
+      ativo: true,
+      reservasConfirmadasNaSemana: 3,
+      aulasRestantesNaSemana: 2,
+    },
+    financeiro: {
+      emDia: true,
+      faturaAtualId: 1,
+      mesReferencia: today.slice(0, 7),
+      vencimento: today,
+      valorTotal: 249.9,
+      valorPago: 249.9,
+      saldo: 0,
+      status: "PAGA",
+      possuiPixPendente: false,
+      pagamentoPixId: null,
+      pixExpiraEm: null,
+    },
+    preferenciaPagamento: {
+      formaPreferida: "PIX",
+      statusAutorizacao: null,
+      pagamentoAutomaticoAtivo: false,
+      descricaoMascarada: null,
+    },
+    evolucaoPeso: {
+      pesoAtual: 78.4,
+      dataPesoAtual: today,
+      diferencaPeso: -3.2,
+      menorPeso: 78.4,
+      maiorPeso: 82.1,
+      totalRegistros: 8,
+    },
+    metaPeso: {
+      metaId: 1,
+      pesoAtual: 78.4,
+      pesoAlvo: 75,
+      quantidadeRestante: 3.4,
+      percentualProgresso: 48,
+      direcao: "PERDER",
+      metaAtingida: false,
+      status: "EM_ANDAMENTO",
+    },
+    proximaAula: aulas[0],
+    aulasHoje: aulas,
+    aulasSemana: aulas,
+    horariosFixosPersonal: [],
   };
 }
 
@@ -217,8 +286,16 @@ function demoCheckIns(inicio: string, fim: string): StudentCheckInHistoryRespons
   let id = 1;
   while (cur <= end) {
     if (cur.getDay() % 2 === 1 || cur.getDay() === 6) {
-      checkIns.push({ id: id++, alunoId: 1, alunoNome: "Rafael Moreira", aulaTurmaId: 1, aulaPersonalId: null,
-        realizadoEm: formatLocalDate(cur) + "T18:05:00", origem: "QR_CODE", confirmadoPor: null });
+      checkIns.push({
+        id: id++,
+        alunoId: 1,
+        alunoNome: "Rafael Moreira",
+        aulaTurmaId: 1,
+        aulaPersonalId: null,
+        realizadoEm: formatLocalDate(cur) + "T18:05:00",
+        origem: "QR_CODE",
+        confirmadoPor: null,
+      });
     }
     cur.setDate(cur.getDate() + 1);
   }
