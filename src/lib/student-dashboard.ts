@@ -1,4 +1,6 @@
 import { http } from "@/lib/api";
+import { appEnv } from "@/lib/env";
+import { getDemoSession } from "@/lib/auth/service";
 
 export interface StudentDashboardResponse {
   alunoId: number;
@@ -134,11 +136,13 @@ export interface StudentCheckInRecord {
   confirmadoPor: string | null;
 }
 
-export function fetchStudentDashboard() {
+export async function fetchStudentDashboard() {
+  if (isDemo()) return demoDashboard();
   return http.get<StudentDashboardResponse>("/api/alunos/me/dashboard");
 }
 
-export function fetchStudentCheckIns(inicio: string, fim: string) {
+export async function fetchStudentCheckIns(inicio: string, fim: string) {
+  if (isDemo()) return demoCheckIns(inicio, fim);
   return http.get<StudentCheckInHistoryResponse>("/api/alunos/me/check-ins", {
     params: { inicio, fim },
   });
@@ -173,4 +177,50 @@ export function calculateCurrentStreak(checkIns: StudentCheckInRecord[]) {
   }
 
   return streak;
+}
+
+function isDemo() {
+  return appEnv.enableDemoMode && Boolean(getDemoSession());
+}
+
+function demoDashboard(): StudentDashboardResponse {
+  const today = formatLocalDate(new Date());
+  const aula = (id: number, h: string, f: string, mod: string): StudentClassSummary => ({
+    aulaId: id, tipo: "TURMA", data: today, horaInicio: h, horaFim: f, status: "AGENDADA",
+    modalidade: mod, professorNome: "Mestre Carlos", reservada: true, checkInRealizado: false,
+    statusPresenca: null, sessaoCheckInAberta: false,
+  });
+  const aulas = [aula(1, "18:00", "19:00", "Muay Thai"), aula(2, "19:30", "20:30", "Jiu-Jitsu")];
+  return {
+    alunoId: 1, nome: "Rafael Moreira", ativo: true,
+    prajied: { prajiedId: 2, nome: "Prajied Vermelho", corHex: "#dc2626", ordem: 2, checkInsAtuais: 38,
+      checkInsNecessariosProximaGraduacao: 50, checkInsFaltantes: 12, proximoPrajiedId: 3,
+      proximoPrajiedNome: "Prajied Azul", percentualProgresso: 76, elegivelParaAvaliacao: false,
+      tempoMinimoMeses: 6, motivo: null },
+    checkIns: { total: 124, noMesAtual: 11, naSemanaAtual: 3, ultimoCheckInEm: new Date().toISOString() },
+    plano: { planoId: 1, nome: "Plano Pro", tipo: "TURMA", aulasPorSemana: 5, valor: 249.9, ativo: true,
+      reservasConfirmadasNaSemana: 3, aulasRestantesNaSemana: 2 },
+    financeiro: { emDia: true, faturaAtualId: 1, mesReferencia: today.slice(0, 7), vencimento: today,
+      valorTotal: 249.9, valorPago: 249.9, saldo: 0, status: "PAGA", possuiPixPendente: false,
+      pagamentoPixId: null, pixExpiraEm: null },
+    preferenciaPagamento: { formaPreferida: "PIX", statusAutorizacao: null, pagamentoAutomaticoAtivo: false, descricaoMascarada: null },
+    evolucaoPeso: { pesoAtual: 78.4, dataPesoAtual: today, diferencaPeso: -3.2, menorPeso: 78.4, maiorPeso: 82.1, totalRegistros: 8 },
+    metaPeso: { metaId: 1, pesoAtual: 78.4, pesoAlvo: 75, quantidadeRestante: 3.4, percentualProgresso: 48, direcao: "PERDER", metaAtingida: false, status: "EM_ANDAMENTO" },
+    proximaAula: aulas[0], aulasHoje: aulas, aulasSemana: aulas, horariosFixosPersonal: [],
+  };
+}
+
+function demoCheckIns(inicio: string, fim: string): StudentCheckInHistoryResponse {
+  const checkIns: StudentCheckInRecord[] = [];
+  const cur = new Date(inicio + "T12:00:00");
+  const end = new Date(fim + "T12:00:00");
+  let id = 1;
+  while (cur <= end) {
+    if (cur.getDay() % 2 === 1 || cur.getDay() === 6) {
+      checkIns.push({ id: id++, alunoId: 1, alunoNome: "Rafael Moreira", aulaTurmaId: 1, aulaPersonalId: null,
+        realizadoEm: formatLocalDate(cur) + "T18:05:00", origem: "QR_CODE", confirmadoPor: null });
+    }
+    cur.setDate(cur.getDate() + 1);
+  }
+  return { alunoId: 1, total: checkIns.length, checkIns };
 }
