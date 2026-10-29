@@ -16,6 +16,43 @@ Interface web do **Elite Fight Club**, um projeto pessoal de gestão para academ
 - Lint, TypeScript e build validados automaticamente pelo GitHub Actions.
 - Deploy público ainda não realizado.
 
+## Protótipo visual
+
+As telas abaixo apresentam o protótipo visual do Elite Fight Club, criado com apoio do **Lovable**. Os dados exibidos são fictícios e algumas funcionalidades ainda estão sendo integradas ao backend em Java e Spring Boot.
+
+<p align="center">
+  <img src="docs/screenshots/prototipo-login.png" alt="Protótipo da tela de login do Elite Fight Club" width="100%">
+  <br>
+  <sub>Tela de acesso e identidade visual da plataforma.</sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/prototipo-dashboard-aluno.png" alt="Protótipo do dashboard do aluno" width="100%">
+      <br>
+      <sub>Dashboard do aluno.</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/prototipo-frequencia-aluno.png" alt="Protótipo da área de frequência do aluno" width="100%">
+      <br>
+      <sub>Frequência e check-ins.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/prototipo-gestao-alunos.png" alt="Protótipo da gestão de alunos pelo professor" width="100%">
+      <br>
+      <sub>Gestão de alunos pelo professor.</sub>
+    </td>
+    <td width="50%" align="center">
+      <img src="docs/screenshots/prototipo-dashboard-admin.png" alt="Protótipo do painel administrativo" width="100%">
+      <br>
+      <sub>Visão geral administrativa.</sub>
+    </td>
+  </tr>
+</table>
+
 ## Funcionalidades da interface
 
 ### Aluno
