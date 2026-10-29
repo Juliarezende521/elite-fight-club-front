@@ -1,4 +1,6 @@
 export const queryKeys = {
+  alunoPesos: (uid: string, academiaId: number, alunoId: number) =>
+    ["aluno", "pesos", uid, academiaId, alunoId] as const,
   session: ["session"] as const,
   authMe: ["auth", "me"] as const,
   alunoDashboard: ["aluno", "dashboard"] as const,
